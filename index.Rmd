@@ -1,11 +1,5 @@
 ---
-title: "Homepage"
-author: "Alexander Denzler"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
-    df_print: paged
+title: "STAT 494: Alexander Denzler"
 ---
 
 ## THIS IS A FILLER HOMEPAGE
