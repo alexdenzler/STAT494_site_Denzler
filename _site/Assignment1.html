@@ -2211,6 +2211,63 @@ Assignments
 <ol start="3" class="example" type="1">
 <li>First, we will do a couple things to get the data ready, including making the outcome a factor (needs to be that way for logistic regression), removing the year variable and some reservation status variables, and removing missing values (not NULLs but true missing values). Split the data into a training and test set, stratifying on the outcome variable, <code>is_canceled</code>. Since we have a lot of data, we’re going to split the data 50/50 between training and test. I have already <code>set.seed()</code> for you. Be sure to use <code>hotels_mod</code> in the splitting.</li>
 </ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels_mod</span> <span class='op'>&lt;-</span> <span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>is_canceled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/naniar/man/where.html'>where</a></span><span class='op'>(</span><span class='va'>is.character</span><span class='op'>)</span>, <span class='va'>as.factor</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>arrival_date_year</span>,
+         <span class='op'>-</span><span class='va'>reservation_status</span>,
+         <span class='op'>-</span><span class='va'>reservation_status_date</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/naniar/man/add_n_miss.html'>add_n_miss</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n_miss_all</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>n_miss_all</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>hotels_mod</span>,
+                             prop <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='va'>hotel_train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>hotel_split</span><span class='op'>)</span>
+<span class='va'>hotel_test</span> <span class='op'>&lt;-</span> <span class='fu'>testing</span><span class='op'>(</span><span class='va'>hotel_split</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ol start="4" class="example" type="1">
+<li>Pre-processing</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_recipe</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>is_canceled</span> <span class='op'>~</span><span class='va'>.</span>,
+                       data <span class='op'>=</span> <span class='va'>hotel_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_mutate</span><span class='op'>(</span>children <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span>
+                   <span class='va'>children</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>1</span>,
+                   <span class='va'>children</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>0</span>
+                 <span class='op'>)</span>,
+                 babies <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span>
+                   <span class='va'>babies</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>1</span>,
+                   <span class='va'>babies</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>0</span>
+                 <span class='op'>)</span>,
+                 previous_cancelations <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span>
+                   <span class='va'>previous_cancelations</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>1</span>,
+                   <span class='va'>previous_cancelations</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='fl'>0</span>
+                 <span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>step_mutate</span><span class='op'>(</span>agent <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span>
+                  <span class='va'>agent</span> <span class='op'>==</span> <span class='cn'>NULL</span> <span class='op'>~</span> <span class='fl'>1</span>,
+                  <span class='va'>agent</span> <span class='op'>!=</span> <span class='cn'>NULL</span> <span class='op'>~</span> <span class='fl'>0</span>
+                <span class='op'>)</span>,
+                company <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span>
+                  <span class='va'>company</span> <span class='op'>==</span> <span class='cn'>NULL</span> <span class='op'>~</span> <span class='fl'>1</span>,
+                  <span class='va'>company</span> <span class='op'>!=</span> <span class='cn'>NULL</span> <span class='op'>~</span> <span class='fl'>0</span>
+                <span class='op'>)</span>
+    <span class='op'>)</span> 
+</code></pre>
+</div>
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

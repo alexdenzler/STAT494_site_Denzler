@@ -109,6 +109,58 @@ hotels %>%
 
 (@) First, we will do a couple things to get the data ready, including making the outcome a factor (needs to be that way for logistic regression), removing the year variable and some reservation status variables, and removing missing values (not NULLs but true missing values). Split the data into a training and test set, stratifying on the outcome variable, `is_canceled`. Since we have a lot of data, we’re going to split the data 50/50 between training and test. I have already `set.seed()` for you. Be sure to use `hotels_mod` in the splitting.
 
+```{r}
+hotels_mod <- hotels %>% 
+  mutate(is_canceled = as.factor(is_canceled)) %>% 
+  mutate(across(where(is.character), as.factor)) %>% 
+  select(-arrival_date_year,
+         -reservation_status,
+         -reservation_status_date) %>% 
+  add_n_miss() %>% 
+  filter(n_miss_all == 0) %>% 
+  select(-n_miss_all)
+
+set.seed(494)
+```
+
+```{r}
+hotel_split <- initial_split(hotels_mod,
+                             prop = 0.5)
+hotel_train <- training(hotel_split)
+hotel_test <- testing(hotel_split)
+```
+
+(@) Pre-processing
+
+```{r}
+hotel_recipe <- recipe(is_canceled ~.,
+                       data = hotel_train) %>% 
+  step_mutate(children = case_when(
+                   children > 0 ~ 1,
+                   children == 0 ~ 0
+                 ),
+                 babies = case_when(
+                   babies > 0 ~ 1,
+                   babies == 0 ~ 0
+                 ),
+                 previous_cancelations = case_when(
+                   previous_cancelations > 0 ~ 1,
+                   previous_cancelations == 0 ~ 0
+                 )
+  ) %>% 
+    step_mutate(agent = case_when(
+                  agent == NULL ~ 1,
+                  agent != NULL ~ 0
+                ),
+                company = case_when(
+                  company == NULL ~ 1,
+                  company != NULL ~ 0
+                )
+    ) 
+      
+  
+```
+
 
 
 
