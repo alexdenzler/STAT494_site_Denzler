@@ -1,7 +1,11 @@
 ---
 title: "Homepage"
 author: "Alexander Denzler"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
 ---
 
 ## THIS IS A FILLER HOMEPAGE
