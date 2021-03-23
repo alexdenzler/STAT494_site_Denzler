@@ -1,0 +1,12 @@
+name: "STAT494_site_Denzler"
+title: "STAT 494: Alex Denzler"
+description: |
+  My Website
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Assignments"
+      href: Assignment1.html
+output: distill::distill_article
