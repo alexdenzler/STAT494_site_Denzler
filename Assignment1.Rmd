@@ -41,4 +41,7 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 * 
 
 
+## Machine Learning review and intro to `tidymodels`
+
+
 
