@@ -12,18 +12,19 @@ output:
 #knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 ```
 
-```{r libraries, message=FALSE}
+```{r libraries, message=FALSE, warning=FALSE}
 library(tidyverse)         # for graphing and data cleaning
 library(tidymodels)        # for modeling
 library(naniar)            # for analyzing missing values
 library(vip)               # for variable importance plots
+library(glmnet)            # for regularized regression, including LASSO
 ```
 
 ```{r theme}
 theme_set(theme_minimal())
 ```
 
-```{r data, cache=TRUE}
+```{r data, cache=TRUE, message=FALSE}
 hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv')
 ```
 
@@ -43,5 +44,24 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 
 ## Machine Learning review and intro to `tidymodels`
 
-(@) 
+(@) Read about the hotel booking data, `hotels`, on the Tidy Tuesday page it came from. There is also a link to an article from the original authors. The outcome we will be predicting is called `is_canceled`.
+
+* Without doing any analysis, what are some variables you think might be predictive and why?
+  + There are a few variables that could be predictive, however `previous_cancellations` definitely stands out. It is reasonable to assume that if someone has canceled before, they could possiblky cancel again. `booking_changes` could also be predictive, as someone who makes a bunch of changes is likely to be unsure about their booking and one of the changes that they could make could be canceling the stay. Finally, a third variable that could be predictive is `customer_type`, as the type of customer could make it easier or more difficult to cancel the stay. 
+  
+* What are some problems that might exist with the data? You might think about how it was collected and who did the collecting.
+  + One issue with the way that the data was collected is that there are almost twice as many observations for the city hotel as the resort hotel, which could introduce bias into the data. The data for canceled bookings could also be less accurate, as variables such as adults, children, and babies could be inaccurate due to the family or group never showing up. Therefore, there could be bias towards non-canceled bookings based on how the data was collected.
+  
+* If we construct a model, what type of conclusions will be able to draw from it?
+  + If we construct a model, the type of conclusions that we'll be able to draw from it are likely to be which variables are most important to determine the likelihood of cancellation. This could easily be achieved using the LASSO technique to analyze variable importance.
+  
+
+(@) Create some exploratory plots or table summaries of the data, concentrating most on relationships with the response variable. Keep in mind the response variable is numeric, 0 or 1. You may want to make it categorical (you also may not). Be sure to also examine missing values or other interesting values.
+
+```{r}
+
+```
+
+
+
 

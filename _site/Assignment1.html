@@ -2094,6 +2094,7 @@ Assignments
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span>        <span class='co'># for modeling</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/njtierney/naniar'>naniar</a></span><span class='op'>)</span>            <span class='co'># for analyzing missing values</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span>               <span class='co'># for variable importance plots</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://glmnet.stanford.edu'>glmnet</a></span><span class='op'>)</span>            <span class='co'># for regularized regression, including LASSO</span>
 </code></pre>
 </div>
 </div>
@@ -2121,8 +2122,28 @@ Assignments
 </ul>
 <h2 id="machine-learning-review-and-intro-to-tidymodels">Machine Learning review and intro to <code>tidymodels</code></h2>
 <ol class="example" type="1">
-<li></li>
+<li>Read about the hotel booking data, <code>hotels</code>, on the Tidy Tuesday page it came from. There is also a link to an article from the original authors. The outcome we will be predicting is called <code>is_canceled</code>.</li>
 </ol>
+<ul>
+<li>Without doing any analysis, what are some variables you think might be predictive and why?
+<ul>
+<li>There are a few variables that could be predictive, however <code>previous_cancellations</code> definitely stands out. It is reasonable to assume that if someone has canceled before, they could possiblky cancel again. <code>booking_changes</code> could also be predictive, as someone who makes a bunch of changes is likely to be unsure about their booking and one of the changes that they could make could be canceling the stay. Finally, a third variable that could be predictive is <code>customer_type</code>, as the type of customer could make it easier or more difficult to cancel the stay.</li>
+</ul></li>
+<li>What are some problems that might exist with the data? You might think about how it was collected and who did the collecting.
+<ul>
+<li>One issue with the way that the data was collected is that there are almost twice as many observations for the city hotel as the resort hotel, which could introduce bias into the data. The data for canceled bookings could also be less accurate, as variables such as adults, children, and babies could be inaccurate due to the family or group never showing up. Therefore, there could be bias towards non-canceled bookings based on how the data was collected.</li>
+</ul></li>
+<li>If we construct a model, what type of conclusions will be able to draw from it?
+<ul>
+<li>If we construct a model, the type of conclusions that we’ll be able to draw from it are likely to be which variables are most important to determine the likelihood of cancellation. This could easily be achieved using the LASSO technique to analyze variable importance.</li>
+</ul></li>
+</ul>
+<ol start="2" class="example" type="1">
+<li>Create some exploratory plots or table summaries of the data, concentrating most on relationships with the response variable. Keep in mind the response variable is numeric, 0 or 1. You may want to make it categorical (you also may not). Be sure to also examine missing values or other interesting values.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
