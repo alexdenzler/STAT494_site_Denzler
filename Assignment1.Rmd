@@ -31,3 +31,5 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 ## Setting Up Git and Github in RStudio
 
 [Here](https://github.com/alexdenzler/STAT494_site_Denzler) is my Github link.
+
+
