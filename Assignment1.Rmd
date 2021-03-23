@@ -33,3 +33,12 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 [Here](https://github.com/alexdenzler/STAT494_site_Denzler) is my Github link.
 
 
+## Creating a Website
+
+* Website Link
+  + [Here](https://upbeat-hawking-b9ef26.netlify.app) is the link to my website.
+  
+* 
+
+
+
