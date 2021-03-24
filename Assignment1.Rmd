@@ -152,17 +152,48 @@ hotel_recipe %>%
 (@) LASSO model and workflow
 * We would want to use a LASSO workflow because LASSO uses an importance coefficient which reduces to zero when the variable is deemed to be not predictive of our outcome variable. This will allow us to reduce the size of our dataset and only focus on our indicator variables that matter.
 
- ```{r}
-# lasso_hotel_mod <- linear_reg(penalty = tune(), mode = "regression") %>%
-#   set_engine("glmnet")
-# 
-# workflow <- workflow() %>% 
-#   add_recipe(hotel_recipe) %>% 
-#   add_model(lasso_hotel_mod)
-# 
-# lasso_hotel_fit <- workflow %>% 
-#   fit(data = hotel_train)
- ```
+```{r}
+lasso_hotel_mod <- logistic_reg(penalty = tune()) %>%
+  set_engine("glmnet") %>% 
+    set_mode("classification")
+
+hotel_workflow <- workflow() %>%
+  add_recipe(hotel_recipe) %>%
+    add_model(lasso_hotel_mod)
+
+lasso_hotel_fit <- workflow %>%
+  fit(data = hotel_train)
+
+lasso_hotel_fit
+```
+
+
+(@) Tune and fit the model
+
+```{r}
+set.seed(494)
+
+hotel_cv <- vfold_cv(hotel_train, v = 5)
+
+hotel_lasso_pen_grid <- grid_regular(penalty(), levels = 10)
+
+hotel_lasso_tune <- hotel_workflow %>% 
+  tune_grid(resamples = hotel_cv,
+            grid = hotel_lasso_pen_grid) %>% 
+    collect_metrics() %>% 
+      filter(.metric == "rmse")
+```
+
+```{r}
+hotel_lasso_tune %>% 
+  ggplot(aes(x = penalty, y = mean)) +
+  geom_point() +
+  geom_line() +
+  scale_x_log10() +
+  labs(x = "Penalty",
+       y = "RMSE")
+```
+
 
 
 
