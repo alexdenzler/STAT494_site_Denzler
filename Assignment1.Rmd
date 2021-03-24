@@ -161,7 +161,7 @@ hotel_workflow <- workflow() %>%
   add_recipe(hotel_recipe) %>%
     add_model(lasso_hotel_mod)
 
-lasso_hotel_fit <- workflow %>%
+lasso_hotel_fit <- hotel_workflow %>%
   fit(data = hotel_train)
 
 lasso_hotel_fit
@@ -179,20 +179,40 @@ hotel_lasso_pen_grid <- grid_regular(penalty(), levels = 10)
 
 hotel_lasso_tune <- hotel_workflow %>% 
   tune_grid(resamples = hotel_cv,
-            grid = hotel_lasso_pen_grid) %>% 
-    collect_metrics() %>% 
-      filter(.metric == "rmse")
+            grid = hotel_lasso_pen_grid)
 ```
 
 ```{r}
 hotel_lasso_tune %>% 
-  ggplot(aes(x = penalty, y = mean)) +
-  geom_point() +
-  geom_line() +
-  scale_x_log10() +
-  labs(x = "Penalty",
-       y = "RMSE")
+  collect_metrics() %>% 
+      filter(.metric == "accuracy") %>% 
+        ggplot(aes(x = penalty, y = mean)) +
+        geom_point() +
+        geom_line() +
+        scale_x_log10(
+        breaks = scales::trans_breaks("log10", function(x) 10^x),
+        labels = scales::trans_format("log10",scales::math_format(10^.x))) +
+        labs(x = "Penalty",
+             y = "Accuracy")
 ```
+
+```{r}
+best_param <- hotel_lasso_tune %>% 
+  select_best(metric = "accuracy")
+
+hotel_lasso_final_workflow <- hotel_workflow %>% 
+  finalize_workflow(best_param)
+
+hotel_lasso_final_mod <- hotel_lasso_final_workflow %>% 
+  fit(data = hotel_train) %>% 
+  pull_workflow_fit() %>% 
+  tidy()
+
+hotel_lasso_final_mod
+```
+
+* Some of the coefficients are zero, signifying that those predictor variables are not a factor in our LASSO model.
+
 
 
 
