@@ -50,7 +50,7 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
   + There are a few variables that could be predictive, however `previous_cancellations` definitely stands out. It is reasonable to assume that if someone has canceled before, they could possiblky cancel again. `booking_changes` could also be predictive, as someone who makes a bunch of changes is likely to be unsure about their booking and one of the changes that they could make could be canceling the stay. Finally, a third variable that could be predictive is `customer_type`, as the type of customer could make it easier or more difficult to cancel the stay. 
   
 * What are some problems that might exist with the data? You might think about how it was collected and who did the collecting.
-  + One issue with the way that the data was collected is that there are almost twice as many observations for the city hotel as the resort hotel, which could introduce bias into the data. The data for canceled bookings could also be less accurate, as variables such as adults, children, and babies could be inaccurate due to the family or group never showing up. Therefore, there could be bias towards non-canceled bookings based on how the data was collected.
+  + One issue with the way that the data was collected is that there are almost twice as many observations for the city hotel as the resort hotel, which could introduce bias into the data. The data for canceled bookings could also be less accurate, as variables such as adults, children, and babies could be inaccurate due to the family or group never showing up. Therefore, there could be bias towards non-canceled bookings based on how the data was collected. The `reservation_status` variable is also a bit redundant, as it states whether someone canceled their reservation or not, which is already given in the `is_canceled` variable. Finally, each reservation is missing a unique identifier, so 
   
 * If we construct a model, what type of conclusions will be able to draw from it?
   + If we construct a model, the type of conclusions that we'll be able to draw from it are likely to be which variables are most important to determine the likelihood of cancellation. This could easily be achieved using the LASSO technique to analyze variable importance.
@@ -135,31 +135,34 @@ hotel_test <- testing(hotel_split)
 ```{r}
 hotel_recipe <- recipe(is_canceled ~.,
                        data = hotel_train) %>% 
-  step_mutate(children = case_when(
-                   children > 0 ~ 1,
-                   children == 0 ~ 0
-                 ),
-                 babies = case_when(
-                   babies > 0 ~ 1,
-                   babies == 0 ~ 0
-                 ),
-                 previous_cancelations = case_when(
-                   previous_cancelations > 0 ~ 1,
-                   previous_cancelations == 0 ~ 0
-                 )
-  ) %>% 
-    step_mutate(agent = case_when(
-                  agent == NULL ~ 1,
-                  agent != NULL ~ 0
-                ),
-                company = case_when(
-                  company == NULL ~ 1,
-                  company != NULL ~ 0
-                )
-    ) 
-      
-  
+  step_mutate_at(children, babies, previous_cancellations,
+                 fn = ~ifelse(. > 0, 1, 0)) %>% 
+    step_mutate_at(agent, company,
+                  fn = ~ifelse(. == "NULL", 1, 0)) %>% 
+      step_mutate(country = fct_lump_n(country, 5)) %>% 
+        step_normalize(all_numeric()) %>% 
+          step_dummy(all_nominal(), -all_outcomes())
+
+hotel_recipe %>% 
+  prep(hotel_train) %>% 
+  juice()
 ```
+
+
+(@) LASSO model and workflow
+* We would want to use a LASSO workflow because LASSO uses an importance coefficient which reduces to zero when the variable is deemed to be not predictive of our outcome variable. This will allow us to reduce the size of our dataset and only focus on our indicator variables that matter.
+
+ ```{r}
+# lasso_hotel_mod <- linear_reg(penalty = tune(), mode = "regression") %>%
+#   set_engine("glmnet")
+# 
+# workflow <- workflow() %>% 
+#   add_recipe(hotel_recipe) %>% 
+#   add_model(lasso_hotel_mod)
+# 
+# lasso_hotel_fit <- workflow %>% 
+#   fit(data = hotel_train)
+ ```
 
 
 
