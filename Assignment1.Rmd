@@ -39,7 +39,8 @@ hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 * Website Link
   + [Here](https://upbeat-hawking-b9ef26.netlify.app) is the link to my website.
   
-* 
+* Building a Career in Data Science, Chapter 4: Building a Portfolio reflection
+  + One thing that stood out most to me was the comment about making a portfolio with results that regular people can digest. I believe that this is important for multiple reasons. First, making sure that your portfolio is understandable will help recruiters who are not necessarily versed in data science techniques understand your work and your abilities. Second, it is most likely that when working in the professional world, you will need to explain your results to people who are not on the data science team, so it is good to practice this ability.
 
 
 ## Machine Learning review and intro to `tidymodels`
@@ -266,6 +267,14 @@ preds %>%
 * The hotel should first call people who are in room type P, as room type P is the most important variable when it comes to predicting whether a reservation will be canceled or not. The hotel should also look at the type of deposit that the reservation maker put down, as that is also very predictive of whether the reservation will be canceled or not. The way that they could measure whether the calls were worth it or not could be by looking at how many cancellations were discovered based on the calls versus the total number of cancellations. They could also observe how many reservations were made for the rooms after they were canceled as a result of the calls. Another way that they could use the model is by looking at the rooms that are canceled the most and making deposits on those rooms non-refundable.
 
 (@) How might you go about questioning and evaluating the model in terms of fairness? Are there any questions you would like to ask of the people who collected the data?
+
+* In terms of fairness, we might want to discuss the potential issues with who we are evaluating. With regards to the individual, it is possible that we are only looking at wealthy people who can afford to go on vacation and stay at a hotel or a resort. With regards to the group reservation type, it is possible that the majority are either multiple wealthy friends, or families who are able to afford going on vacation. This is a situation where demographics are important, and I would want to ask the researchers about the demographics of the people who were making the reservations, as by including mostly wealthy people, the researchers would not be understanding the true trends of the population.
+
+
+
+## Bias and Fairness Reflection
+
+* 
 
 
 
