@@ -261,6 +261,13 @@ preds %>%
 * If the true positive rate increases, the true negative rate should increase as well, because by increasing the true positive rate, we are eliminating incorrect predictions. Eliminating incorrect predictions will drive down the false negative rate.
 
 
+(@) Let’s say that this model is going to be applied to bookings 14 days in advance of their arrival at each hotel, and someone who works for the hotel will make a phone call to the person who made the booking. During this phone call, they will try to assure that the person will be keeping their reservation or that they will be canceling in which case they can do that now and still have time to fill the room. How should the hotel go about deciding who to call? How could they measure whether it was worth the effort to do the calling? Can you think of another way they might use the model?
+
+* The hotel should first call people who are in room type P, as room type P is the most important variable when it comes to predicting whether a reservation will be canceled or not. The hotel should also look at the type of deposit that the reservation maker put down, as that is also very predictive of whether the reservation will be canceled or not. The way that they could measure whether the calls were worth it or not could be by looking at how many cancellations were discovered based on the calls versus the total number of cancellations. They could also observe how many reservations were made for the rooms after they were canceled as a result of the calls. Another way that they could use the model is by looking at the rooms that are canceled the most and making deposits on those rooms non-refundable.
+
+(@) How might you go about questioning and evaluating the model in terms of fairness? Are there any questions you would like to ask of the people who collected the data?
+
+
 
 
 
