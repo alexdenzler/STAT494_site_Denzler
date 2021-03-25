@@ -185,6 +185,12 @@ hotel_lasso_tune <- hotel_workflow %>%
 ```{r}
 hotel_lasso_tune %>% 
   collect_metrics() %>% 
+      filter(.metric == "accuracy")
+```
+
+```{r}
+hotel_lasso_tune %>% 
+  collect_metrics() %>% 
       filter(.metric == "accuracy") %>% 
         ggplot(aes(x = penalty, y = mean)) +
         geom_point() +
@@ -204,14 +210,57 @@ hotel_lasso_final_workflow <- hotel_workflow %>%
   finalize_workflow(best_param)
 
 hotel_lasso_final_mod <- hotel_lasso_final_workflow %>% 
-  fit(data = hotel_train) %>% 
+  fit(data = hotel_train)
+
+hotel_lasso_final_mod %>% 
   pull_workflow_fit() %>% 
   tidy()
-
-hotel_lasso_final_mod
 ```
 
 * Some of the coefficients are zero, signifying that those predictor variables are not a factor in our LASSO model.
+
+
+(@) Variable Importance Graph
+
+```{r}
+hotel_lasso_final_mod %>% 
+  pull_workflow_fit() %>% 
+  vip()
+```
+
+* It is unsurprising that the type of room reserved is the most important variable. It can explain a possible hypothesis that the majority of cancellations come when someone in a group drops out of a reservation. The importance of the non-refundable deposit type is also unsurprising because putting down a non-refundable deposit will most likely influence someone to not cancel their reservation.
+
+```{r}
+hotel_lasso_test <- hotel_lasso_final_workflow %>% 
+  last_fit(hotel_split)
+
+hotel_lasso_test %>% 
+  collect_metrics()
+```
+
+* The accuracy estimate for the test data is slightly higher than for the cross-validated data.
+
+```{r}
+preds <- collect_predictions(hotel_lasso_test)
+
+preds %>% 
+  conf_mat(.pred_class, is_canceled)
+```
+
+* Sensitivity: $\frac{34492}{34492+8004} = 0.81165$
+* Specificity: $\frac{14032}{14032 + 3165} = 0.815956$
+
+```{r}
+preds %>% 
+  ggplot(aes(x = .pred_1, fill = is_canceled)) +
+  geom_density(alpha = 0.5, color = NA)
+```
+
+* For an accuracy close to 1, the plot would have almost no overlap at all, as the true positive and true negative rates would each be close to 1.
+* If we want to have a higher true positive rate, we should make the cutoff higher than 0.5, as only including predictions that are more likely to be canceled would filter out predicitions that were somewhat likely (i.e. 50%-60% likely) to be canceled that ended up not being canceled. 
+* If the true positive rate increases, the true negative rate should increase as well, because by increasing the true positive rate, we are eliminating incorrect predictions. Eliminating incorrect predictions will drive down the false negative rate.
+
+
 
 
 
