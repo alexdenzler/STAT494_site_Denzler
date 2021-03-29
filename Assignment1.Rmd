@@ -20,9 +20,6 @@ library(vip)               # for variable importance plots
 library(glmnet)            # for regularized regression, including LASSO
 ```
 
-```{r theme}
-theme_set(theme_minimal())
-```
 
 ```{r data, cache=TRUE, message=FALSE}
 hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv')
