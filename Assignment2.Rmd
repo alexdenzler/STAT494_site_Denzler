@@ -173,7 +173,27 @@ lending_lasso_tune <- lending_workflow %>%
   tune_grid(resamples = lending_cv,
             grid = lending_lasso_pen_grid,
             control = ctrl_grid)
+
+best_param <- lending_lasso_tune %>% 
+  select_best(metric = "penalty")
+
+lending_lasso_final_wf <- lending_workflow %>% 
+  finalize_workflow(best_param)
+
+lending_lasso_final_mod <- lending_lasso_final_wf %>% 
+  fit(data = lending_train)
 ```
+
+```{r}
+lasso_explain <- 
+  explain_tidymodels(
+    model = lending_lasso_final_mod,
+    data = lending_train %>% select(-Class), 
+    y = lending_train %>%  pull(Class),
+    label = "lasso"
+  )
+```
+
 
 
 (@) Set up the recipe and the pre-processing steps to build a random forest model. You shouldn’t have to do as many steps. The only step you should need to do is making all integers numeric.
@@ -187,7 +207,7 @@ ranger_recipe <- recipe(Class ~ .,
   step_mutate(verification_status = 
                 ifelse(verification_status == "Not_Verified", "Not_Verified", "Verified")) %>% 
   step_mutate(annual_inc =
-              case_when(annual_inc <= 9875 ~ 10,
+              case_when(annual_inc <= 9875                          ~ 10,
                         annual_inc > 9875   && annual_inc <= 40125  ~ 12,
                         annual_inc > 40125  && annual_inc <= 85525  ~ 22,
                         annual_inc > 85525  && annual_inc <= 163300 ~ 24,
