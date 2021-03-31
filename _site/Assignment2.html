@@ -2211,7 +2211,7 @@ Assignments
 </ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span> <span class='co'># for reproducability</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
 
 <span class='va'>lending_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>lending_club_mod</span>,
                              prop <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
@@ -2234,25 +2234,423 @@ Assignments
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_recipe</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>Class</span> <span class='op'>~</span> <span class='va'>.</span>,
                          data <span class='op'>=</span> <span class='va'>lending_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>step_rm</span><span class='op'>(</span><span class='va'>acc_now_delinq</span>, <span class='va'>delinq_amnt</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span>,
+  <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>,
                  fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_mutate</span><span class='op'>(</span>verification_status <span class='op'>=</span> 
-                <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>verification_status</span> <span class='op'>==</span> <span class='st'>"Not_Verified"</span>, <span class='st'>"Not_Verified"</span>, <span class='st'>"Verified"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_mutate</span><span class='op'>(</span><span class='va'>annual_inc</span>,
-              fn <span class='op'>=</span> <span class='fu'>case_when</span><span class='op'>(</span><span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>9875</span> <span class='op'>~</span> <span class='fl'>10</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>9875</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>40125</span> <span class='op'>~</span> <span class='fl'>12</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>40125</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>85525</span> <span class='op'>~</span> <span class='fl'>22</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>85525</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>163300</span> <span class='op'>~</span> <span class='fl'>24</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>163300</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>207350</span> <span class='op'>~</span> <span class='fl'>32</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>207350</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>518400</span> <span class='op'>~</span> <span class='fl'>35</span>,
-                             <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>518400</span> <span class='op'>~</span> <span class='fl'>37</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_mutate</span><span class='op'>(</span><span class='va'>annual_inc</span>, fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>annual_inc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_normalize</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_mutate</span><span class='op'>(</span>annual_inc <span class='op'>=</span>
+              <span class='fu'>case_when</span><span class='op'>(</span><span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>9875</span>                          <span class='op'>~</span> <span class='fl'>10</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>9875</span>   <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>40125</span>  <span class='op'>~</span> <span class='fl'>12</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>40125</span>  <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>85525</span>  <span class='op'>~</span> <span class='fl'>22</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>85525</span>  <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>163300</span> <span class='op'>~</span> <span class='fl'>24</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>163300</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>207350</span> <span class='op'>~</span> <span class='fl'>32</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>207350</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>518400</span> <span class='op'>~</span> <span class='fl'>35</span>,
+                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>518400</span>                         <span class='op'>~</span> <span class='fl'>37</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>step_mutate</span><span class='op'>(</span>annual_inc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>annual_inc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_normalize</span><span class='op'>(</span><span class='fu'>all_predictors</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>step_dummy</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_outcomes</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>lending_recipe</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>prep</span><span class='op'>(</span><span class='va'>lending_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>juice</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 9,643 x 113
+   funded_amnt int_rate delinq_2yrs inq_last_6mths revol_util
+         &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
+ 1      0.0264   0.0908      -0.364         -0.705     0.610 
+ 2      1.80    -0.293       -0.364         -0.705     1.21  
+ 3     -0.654    0.532       -0.364          1.43      0.888 
+ 4      0.105    0.0294      -0.364         -0.705     0.471 
+ 5     -1.38    -1.18        -0.364         -0.705     1.06  
+ 6     -0.654   -0.393       -0.364         -0.705     0.639 
+ 7     -0.543   -1.57        -0.364         -0.705     0.0955
+ 8     -0.0963  -0.836        1.84          -0.705    -0.783 
+ 9     -1.10    -0.713       -0.364          1.43      0.810 
+10      0.462   -0.101        0.739         -0.705    -0.672 
+# … with 9,633 more rows, and 108 more variables: open_il_6m &lt;dbl&gt;,
+#   open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;, total_bal_il &lt;dbl&gt;,
+#   all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;, inq_last_12m &lt;dbl&gt;,
+#   num_il_tl &lt;dbl&gt;, total_il_high_credit_limit &lt;dbl&gt;, Class &lt;fct&gt;,
+#   term_term_60 &lt;dbl&gt;, sub_grade_A2 &lt;dbl&gt;, sub_grade_A3 &lt;dbl&gt;,
+#   sub_grade_A4 &lt;dbl&gt;, sub_grade_A5 &lt;dbl&gt;, sub_grade_B1 &lt;dbl&gt;,
+#   sub_grade_B2 &lt;dbl&gt;, sub_grade_B3 &lt;dbl&gt;, sub_grade_B4 &lt;dbl&gt;,
+#   sub_grade_B5 &lt;dbl&gt;, sub_grade_C1 &lt;dbl&gt;, sub_grade_C2 &lt;dbl&gt;,
+#   sub_grade_C3 &lt;dbl&gt;, sub_grade_C4 &lt;dbl&gt;, sub_grade_C5 &lt;dbl&gt;,
+#   sub_grade_D1 &lt;dbl&gt;, sub_grade_D2 &lt;dbl&gt;, sub_grade_D3 &lt;dbl&gt;,
+#   sub_grade_D4 &lt;dbl&gt;, sub_grade_D5 &lt;dbl&gt;, sub_grade_E1 &lt;dbl&gt;,
+#   sub_grade_E2 &lt;dbl&gt;, sub_grade_E3 &lt;dbl&gt;, sub_grade_E4 &lt;dbl&gt;,
+#   sub_grade_E5 &lt;dbl&gt;, sub_grade_F1 &lt;dbl&gt;, sub_grade_F2 &lt;dbl&gt;,
+#   sub_grade_F3 &lt;dbl&gt;, sub_grade_F4 &lt;dbl&gt;, sub_grade_F5 &lt;dbl&gt;,
+#   sub_grade_G1 &lt;dbl&gt;, sub_grade_G2 &lt;dbl&gt;, sub_grade_G3 &lt;dbl&gt;,
+#   sub_grade_G4 &lt;dbl&gt;, sub_grade_G5 &lt;dbl&gt;, addr_state_AL &lt;dbl&gt;,
+#   addr_state_AR &lt;dbl&gt;, addr_state_AZ &lt;dbl&gt;, addr_state_CA &lt;dbl&gt;,
+#   addr_state_CO &lt;dbl&gt;, addr_state_CT &lt;dbl&gt;, addr_state_DC &lt;dbl&gt;,
+#   addr_state_DE &lt;dbl&gt;, addr_state_FL &lt;dbl&gt;, addr_state_GA &lt;dbl&gt;,
+#   addr_state_HI &lt;dbl&gt;, addr_state_ID &lt;dbl&gt;, addr_state_IL &lt;dbl&gt;,
+#   addr_state_IN &lt;dbl&gt;, addr_state_KS &lt;dbl&gt;, addr_state_KY &lt;dbl&gt;,
+#   addr_state_LA &lt;dbl&gt;, addr_state_MA &lt;dbl&gt;, addr_state_MD &lt;dbl&gt;,
+#   addr_state_ME &lt;dbl&gt;, addr_state_MI &lt;dbl&gt;, addr_state_MN &lt;dbl&gt;,
+#   addr_state_MO &lt;dbl&gt;, addr_state_MS &lt;dbl&gt;, addr_state_MT &lt;dbl&gt;,
+#   addr_state_NC &lt;dbl&gt;, addr_state_ND &lt;dbl&gt;, addr_state_NE &lt;dbl&gt;,
+#   addr_state_NH &lt;dbl&gt;, addr_state_NJ &lt;dbl&gt;, addr_state_NM &lt;dbl&gt;,
+#   addr_state_NV &lt;dbl&gt;, addr_state_NY &lt;dbl&gt;, addr_state_OH &lt;dbl&gt;,
+#   addr_state_OK &lt;dbl&gt;, addr_state_OR &lt;dbl&gt;, addr_state_PA &lt;dbl&gt;,
+#   addr_state_RI &lt;dbl&gt;, addr_state_SC &lt;dbl&gt;, addr_state_SD &lt;dbl&gt;,
+#   addr_state_TN &lt;dbl&gt;, addr_state_TX &lt;dbl&gt;, addr_state_UT &lt;dbl&gt;,
+#   addr_state_VA &lt;dbl&gt;, addr_state_VT &lt;dbl&gt;, addr_state_WA &lt;dbl&gt;,
+#   addr_state_WI &lt;dbl&gt;, addr_state_WV &lt;dbl&gt;, addr_state_WY &lt;dbl&gt;,
+#   verification_status_Source_Verified &lt;dbl&gt;,
+#   verification_status_Verified &lt;dbl&gt;, annual_inc_X12 &lt;dbl&gt;,
+#   emp_length_emp_1 &lt;dbl&gt;, emp_length_emp_ge_10 &lt;dbl&gt;,
+#   emp_length_emp_2 &lt;dbl&gt;, …</code></pre>
+</div>
+<ol start="5" class="example" type="1">
+<li>Set up the LASSO model and workflow. We will tune the <code>penalty</code> parameter.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lasso_lending_mod</span> <span class='op'>&lt;-</span> <span class='fu'>logistic_reg</span><span class='op'>(</span>mixture <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"glmnet"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>set_args</span><span class='op'>(</span>penalty <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span>
+
+<span class='va'>lasso_lending_mod</span>
+</code></pre>
+</div>
+<pre><code>Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = tune()
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_workflow</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>lending_recipe</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>lasso_lending_mod</span><span class='op'>)</span>
+
+<span class='va'>lending_workflow</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: logistic_reg()
+
+── Preprocessor ──────────────────────────────────────────────────────
+6 Recipe Steps
+
+● step_rm()
+● step_mutate_at()
+● step_mutate()
+● step_mutate()
+● step_normalize()
+● step_dummy()
+
+── Model ─────────────────────────────────────────────────────────────
+Logistic Regression Model Specification (classification)
+
+Main Arguments:
+  penalty = tune()
+  mixture = 1
+
+Computational engine: glmnet </code></pre>
+</div>
+<ol start="6" class="example" type="1">
+<li>Set up the model tuning for the <code>penalty</code> parameter. Be sure to add the <code>control_stack_grid()</code> for the <code>control</code> argument so we can use these results later when we stack. Find the accuracy and area under the roc curve for the model with the best tuning parameter. Use 5-fold cv.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>lending_cv</span> <span class='op'>&lt;-</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>lending_train</span>, v <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+
+<span class='va'>lending_lasso_pen_grid</span> <span class='op'>&lt;-</span> <span class='fu'>grid_regular</span><span class='op'>(</span><span class='fu'>penalty</span><span class='op'>(</span><span class='op'>)</span>, levels <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='va'>ctrl_grid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/control_stack.html'>control_stack_grid</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>lending_lasso_tune</span> <span class='op'>&lt;-</span> <span class='va'>lending_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>tune_grid</span><span class='op'>(</span>resamples <span class='op'>=</span> <span class='va'>lending_cv</span>,
+            grid <span class='op'>=</span> <span class='va'>lending_lasso_pen_grid</span>,
+            control <span class='op'>=</span> <span class='va'>ctrl_grid</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>show_best</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 7
+      penalty .metric .estimator    mean     n  std_err .config       
+        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;         
+1    7.74e- 2 accura… binary       0.736     4  0.00467 Preprocessor1…
+2    1.00e+ 0 accura… binary       0.728     4  0.00555 Preprocessor1…
+3    1.00e-10 accura… binary     NaN         0 NA       Preprocessor1…
+4    1.29e- 9 accura… binary     NaN         0 NA       Preprocessor1…
+5    1.67e- 8 accura… binary     NaN         0 NA       Preprocessor1…</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.config</span> <span class='op'>==</span> <span class='st'>"Preprocessor1_Model01"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 7
+      penalty .metric  .estimator  mean     n std_err .config         
+        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
+1    1.00e-10 accuracy binary       NaN     0      NA Preprocessor1_M…
+2    1.00e-10 roc_auc  binary       NaN     0      NA Preprocessor1_M…</code></pre>
+</div>
+<ol start="7" class="example" type="1">
+<li>Set up the recipe and the pre-processing steps to build a random forest model. You shouldn’t have to do as many steps. The only step you should need to do is making all integers numeric.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_recipe</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>Class</span> <span class='op'>~</span> <span class='va'>.</span>,
+                         data <span class='op'>=</span> <span class='va'>lending_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_rm</span><span class='op'>(</span><span class='va'>acc_now_delinq</span>, <span class='va'>delinq_amnt</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>,
+                 fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='co'># step_mutate(annual_inc =</span>
+  <span class='co'>#             case_when(annual_inc &lt;= 9875                          ~ 10,</span>
+  <span class='co'>#                       annual_inc &gt; 9875   &amp;&amp; annual_inc &lt;= 40125  ~ 12,</span>
+  <span class='co'>#                       annual_inc &gt; 40125  &amp;&amp; annual_inc &lt;= 85525  ~ 22,</span>
+  <span class='co'>#                       annual_inc &gt; 85525  &amp;&amp; annual_inc &lt;= 163300 ~ 24,</span>
+  <span class='co'>#                       annual_inc &gt; 163300 &amp;&amp; annual_inc &lt;= 207350 ~ 32,</span>
+  <span class='co'>#                       annual_inc &gt; 207350 &amp;&amp; annual_inc &lt;= 518400 ~ 35,</span>
+  <span class='co'>#                       annual_inc &gt; 518400                         ~ 37)) %&gt;%</span>
+  <span class='co'>#step_mutate(annual_inc = as.factor(annual_inc)</span>
+</code></pre>
+</div>
+</div>
+<ol start="8" class="example" type="1">
+<li>Set up the random forest model and workflow. We will tune the <code>mtry</code> and <code>min_n</code> parameters and set the number of trees, <code>trees</code>, to 100 (otherwise the next steps take too long).</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_spec</span> <span class='op'>&lt;-</span> <span class='fu'>rand_forest</span><span class='op'>(</span>mtry <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span>,
+                           min_n <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span>,
+                           trees <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"ranger"</span><span class='op'>)</span>
+
+<span class='va'>ranger_spec</span>
+</code></pre>
+</div>
+<pre><code>Random Forest Model Specification (classification)
+
+Main Arguments:
+  mtry = tune()
+  trees = 100
+  min_n = tune()
+
+Computational engine: ranger </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_workflow</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>ranger_recipe</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>ranger_spec</span><span class='op'>)</span>
+
+<span class='va'>ranger_workflow</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: rand_forest()
+
+── Preprocessor ──────────────────────────────────────────────────────
+2 Recipe Steps
+
+● step_rm()
+● step_mutate_at()
+
+── Model ─────────────────────────────────────────────────────────────
+Random Forest Model Specification (classification)
+
+Main Arguments:
+  mtry = tune()
+  trees = 100
+  min_n = tune()
+
+Computational engine: ranger </code></pre>
+</div>
+<ol start="9" class="example" type="1">
+<li>Set up the model tuning for both the <code>mtry</code> and <code>min_n</code> parameters. Be sure to add the <code>control_stack_grid()</code> for the control argument so we can use these results later when we stack. Use only 3 levels in the grid. For the <code>mtry</code> parameter, you need to put <code>finalize(mtry(), lending_training %&gt;% select(-Class))</code> in as an argument instead of just <code>mtry()</code>, where <code>lending_training</code> is the name of your training data. This is because the <code>mtry()</code> grid will otherwise have unknowns in it. This part can take a while to run.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>lending_rf_grid</span> <span class='op'>&lt;-</span> <span class='fu'>grid_regular</span><span class='op'>(</span><span class='fu'>min_n</span><span class='op'>(</span><span class='op'>)</span>, 
+                                <span class='fu'>finalize</span><span class='op'>(</span><span class='fu'>mtry</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>lending_train</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>Class</span><span class='op'>)</span><span class='op'>)</span>,
+                                levels <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> 
+
+<span class='va'>ctrl_res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/control_stack.html'>control_stack_grid</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>ranger_cv</span> <span class='op'>&lt;-</span> <span class='va'>ranger_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>tune_grid</span><span class='op'>(</span>resamples <span class='op'>=</span> <span class='va'>lending_cv</span>,
+            grid <span class='op'>=</span> <span class='va'>lending_rf_grid</span>,
+            control <span class='op'>=</span> <span class='va'>ctrl_res</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ol start="10" class="example" type="1">
+<li>Find the best tuning parameters. What is the are the accuracy and area under the ROC curve for the model with those tuning parameters?</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_cv</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>show_best</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 8
+   mtry min_n .metric  .estimator  mean     n  std_err .config        
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
+1    11     2 accuracy binary     0.989     5 0.000780 Preprocessor1_…
+2    22     2 accuracy binary     0.987     5 0.000977 Preprocessor1_…
+3     1     2 accuracy binary     0.975     5 0.00192  Preprocessor1_…
+4    22    21 accuracy binary     0.974     5 0.00249  Preprocessor1_…
+5    11    21 accuracy binary     0.972     5 0.000761 Preprocessor1_…</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_cv</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.config</span> <span class='op'>==</span> <span class='st'>"Preprocessor1_Model4"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 8
+   mtry min_n .metric  .estimator  mean     n  std_err .config        
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
+1    11     2 accuracy binary     0.989     5 0.000780 Preprocessor1_…
+2    11     2 roc_auc  binary     0.996     5 0.00168  Preprocessor1_…</code></pre>
+</div>
+<p>The best tuning parameters are 11 for <code>mtry</code> and 2 for <code>min_n</code>.</p>
+<ol start="11" class="example" type="1">
+<li>Use functions from the <code>DALEX</code> and <code>DALEXtra</code> libraries to create a histogram and boxplot of the residuals from the training data. How do they look? Any interesting behavior?</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>best_param</span> <span class='op'>&lt;-</span> <span class='va'>lending_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_best</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+<span class='va'>lending_lasso_final_wf</span> <span class='op'>&lt;-</span> <span class='va'>lending_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>finalize_workflow</span><span class='op'>(</span><span class='va'>best_param</span><span class='op'>)</span>
+<span class='va'>lending_lasso_final_mod</span> <span class='op'>&lt;-</span> <span class='va'>lending_lasso_final_wf</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>fit</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>lending_train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+<span class='va'>ranger_fit</span> <span class='op'>&lt;-</span> <span class='va'>ranger_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>fit</span><span class='op'>(</span><span class='va'>lending_train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_lasso_explain</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/explain_tidymodels.html'>explain_tidymodels</a></span><span class='op'>(</span>
+  model <span class='op'>=</span> <span class='va'>lending_lasso_final_mod</span>,
+  data <span class='op'>=</span> <span class='va'>lending_train</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>Class</span><span class='op'>)</span>,
+  y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>lending_train</span><span class='op'>$</span><span class='va'>Class</span> <span class='op'>==</span> <span class='st'>"good"</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='st'>"LASSO"</span>,
+  type <span class='op'>=</span> <span class='st'>"classification"</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  LASSO 
+  -&gt; data              :  9643  rows  22  cols 
+  -&gt; data              :  tibble converted into a data.frame 
+  -&gt; target variable   :  9643  values 
+  -&gt; predict function  :  yhat.workflow  will be used ( [33m default [39m )
+  -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
+  -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
+  -&gt; model_info        :  type set to  classification 
+  -&gt; predicted values  :  numerical, min =  0.4404021 , mean =  0.7258119 , max =  0.8420383  
+  -&gt; residual function :  difference between y and yhat ( [33m default [39m )
+  -&gt; residuals         :  numerical, min =  -0.8420383 , mean =  -4.298544e-07 , max =  0.5595979  
+ [32m A new explainer has been created! [39m </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_explain</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/explain_tidymodels.html'>explain_tidymodels</a></span><span class='op'>(</span>
+  model <span class='op'>=</span> <span class='va'>ranger_fit</span>,
+  data <span class='op'>=</span> <span class='va'>lending_train</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>Class</span><span class='op'>)</span>,
+  y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>lending_train</span><span class='op'>$</span><span class='va'>Class</span> <span class='op'>==</span> <span class='st'>"good"</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='st'>"Random Forest"</span>,
+  type <span class='op'>=</span> <span class='st'>"classification"</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  Random Forest 
+  -&gt; data              :  9643  rows  22  cols 
+  -&gt; data              :  tibble converted into a data.frame 
+  -&gt; target variable   :  9643  values 
+  -&gt; predict function  :  yhat.workflow  will be used ( [33m default [39m )
+  -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
+  -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
+  -&gt; model_info        :  type set to  classification 
+  -&gt; predicted values  :  numerical, min =  0.7267438 , mean =  0.7267438 , max =  0.7267438  
+  -&gt; residual function :  difference between y and yhat ( [33m default [39m )
+  -&gt; residuals         :  numerical, min =  -0.7267438 , mean =  -0.0009322825 , max =  0.2732562  
+ [32m A new explainer has been created! [39m </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_lasso_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_lasso_explain</span><span class='op'>)</span>
+<span class='va'>lending_lasso_model_perf</span>
+</code></pre>
+</div>
+<pre><code>Measures for:  classification
+recall     : 0.9914273 
+precision  : 0.7340527 
+f1         : 0.8435449 
+accuracy   : 0.7330706 
+auc        : 0.7448202
+
+Residuals:
+        0%        10%        20%        30%        40%        50% 
+-0.8420383 -0.7180441 -0.6283219  0.1579617  0.1875870  0.2038640 
+       60%        70%        80%        90%       100% 
+ 0.2356944  0.2568366  0.2819559  0.3478567  0.5595979 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_rf_explain</span><span class='op'>)</span>
+<span class='va'>lending_rf_model_perf</span>
+</code></pre>
+</div>
+<pre><code>Measures for:  classification
+recall     : 1 
+precision  : 0.7258115 
+f1         : 0.8411249 
+accuracy   : 0.7258115 
+auc        : 0.9241704
+
+Residuals:
+        0%        10%        20%        30%        40%        50% 
+-0.7267438 -0.7267438 -0.7267438  0.2732562  0.2732562  0.2732562 
+       60%        70%        80%        90%       100% 
+ 0.2732562  0.2732562  0.2732562  0.2732562  0.2732562 </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hist_plot</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_lasso_model_perf</span>,
+       <span class='va'>lending_rf_model_perf</span>, 
+       geom <span class='op'>=</span> <span class='st'>"histogram"</span><span class='op'>)</span>
+<span class='va'>box_plot</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_lasso_model_perf</span>,
+       <span class='va'>lending_rf_model_perf</span>, 
+       geom <span class='op'>=</span> <span class='st'>"boxplot"</span><span class='op'>)</span>
+
+<span class='va'>hist_plot</span> <span class='op'>+</span> <span class='va'>box_plot</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-24-1.png" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
