@@ -301,7 +301,7 @@ lending_rf_model_perf <- model_performance(lending_rf_explain)
 lending_rf_model_perf
 ```
 
-```{r}
+```{r, fig.width=10, fig.height=8}
 hist_plot <- 
   plot(lending_lasso_model_perf,
        lending_rf_model_perf, 
@@ -314,7 +314,74 @@ box_plot <-
 hist_plot + box_plot
 ```
 
+The distribution and spread of the LASSO residuals seem to indicate that the LASSO model is inconsistent, as there appears to be only two residual values for the LASSO model according to the histogram. However, the residuals seem to be at -0.75 and 0.25, which explains the large spread of the boxplot. Meanwhile, although the spread of the random forest seems to be smaller, the IQR is much larger, and begins at the median of the LASSO. The RMSE is also extremely similar for both models.
 
+(@) Use `DALEX` functions to create a variable importance plot from this model. What are the most important variables?
+
+```{r, fig.width=10, fig.height=8}
+set.seed(494)
+
+lending_lasso_var_imp <- 
+  model_parts(
+    lending_lasso_explain
+    )
+lend_lasso_VIP_plot <- 
+  plot(lending_lasso_var_imp, show_boxplots = TRUE)
+
+lending_rf_var_imp <- 
+  model_parts(
+    lending_rf_explain
+    )
+lend_rf_VIP_plot <- 
+  plot(lending_rf_var_imp, show_boxplots = TRUE)
+
+lend_lasso_VIP_plot
+lend_rf_VIP_plot
+```
+
+Interest rate seems to be the most important variable by a large margin.
+
+(@) Write a function called `cp_profile` to make a CP profile. The function will take an explainer, a new observation, and a variable name as its arguments and create a CP profile for a quantitative predictor variable. You will need to use the `predict_profile()` function inside the function you create - put the variable name there so the plotting part is easier. You’ll also want to use `aes_string()` rather than `aes()` and quote the variables. Use the `cp_profile()` function to create one CP profile of your choosing. Be sure to choose a variable that is numeric, not integer. There seem to be issues with those that I’m looking into.
+
+```{r}
+cp_profile <- function(explainer, newObs, varName) {
+  predict_profile(explainer = explainer,
+                  new_observation = newObs) %>% 
+    ggplot(aes_string(x = varName, y = `_yhat_`)) + 
+    geom_line()
+}
+```
+
+```{r}
+cp_profile(explainer = lending_lasso_explain, 
+           newObs = lending_train %>% slice_sample(), 
+           varName = int_rate)
+```
+
+(@) Use `DALEX` functions to create partial dependence plots (with the CP profiles in gray) for the 3-4 most important variables. If the important variables are categorical, you can instead make a CP profile for 3 observations in the dataset and discuss how you could go about constructing a partial dependence plot for a categorical variable (you don’t have to code it, but you can if you want an extra challenge). If it ever gives you an error that says, “Error: Can’t convert from `VARIABLE` to `VARIABLE` due to loss of precision”, then remove that variable from the list. I seem to have figured out why it’s doing that, but I don’t know how to fix it yet.
+
+
+
+
+(@) Fit one more model type of your choosing that will feed into the stacking model.
+
+```{r}
+lending_knn_mod <-
+  nearest_neighbor(
+    neighbors = tune("k")
+  ) %>%
+  set_engine("kknn") %>% 
+  set_mode("classification")
+
+lending_knn_workflow <- workflow() %>% 
+  add_model(lending_knn_mod) %>% 
+  add_recipe()
+
+lending_knn_tune <- lending_knn_workflow %>% 
+  tune_grid(resamples = lending_cv, 
+            grid = 3,
+            control = ctrl_grid)
+```
 
 
 

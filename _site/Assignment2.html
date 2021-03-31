@@ -2256,16 +2256,16 @@ Assignments
 <pre><code># A tibble: 9,643 x 113
    funded_amnt int_rate delinq_2yrs inq_last_6mths revol_util
          &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
- 1      0.0264   0.0908      -0.364         -0.705     0.610 
- 2      1.80    -0.293       -0.364         -0.705     1.21  
- 3     -0.654    0.532       -0.364          1.43      0.888 
- 4      0.105    0.0294      -0.364         -0.705     0.471 
- 5     -1.38    -1.18        -0.364         -0.705     1.06  
- 6     -0.654   -0.393       -0.364         -0.705     0.639 
- 7     -0.543   -1.57        -0.364         -0.705     0.0955
- 8     -0.0963  -0.836        1.84          -0.705    -0.783 
- 9     -1.10    -0.713       -0.364          1.43      0.810 
-10      0.462   -0.101        0.739         -0.705    -0.672 
+ 1      0.0238   0.0798      -0.365         -0.706     0.604 
+ 2      1.79    -0.300       -0.365         -0.706     1.21  
+ 3     -0.655    0.516       -0.365          1.43      0.882 
+ 4      0.102    0.0190      -0.365         -0.706     0.465 
+ 5     -1.38    -1.17        -0.365         -0.706     1.05  
+ 6     -0.655   -0.399       -0.365         -0.706     0.633 
+ 7     -0.544   -1.57        -0.365         -0.706     0.0892
+ 8     -0.0987  -0.837        1.82          -0.706    -0.789 
+ 9     -1.10    -0.716       -0.365          1.43      0.804 
+10      0.458   -0.110        0.727         -0.706    -0.679 
 # … with 9,633 more rows, and 108 more variables: open_il_6m &lt;dbl&gt;,
 #   open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;, total_bal_il &lt;dbl&gt;,
 #   all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;, inq_last_12m &lt;dbl&gt;,
@@ -2383,7 +2383,7 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 5 x 7
       penalty .metric .estimator    mean     n  std_err .config       
         &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;         
-1    7.74e- 2 accura… binary       0.736     4  0.00467 Preprocessor1…
+1    7.74e- 2 accura… binary       0.739     4  0.00656 Preprocessor1…
 2    1.00e+ 0 accura… binary       0.728     4  0.00555 Preprocessor1…
 3    1.00e-10 accura… binary     NaN         0 NA       Preprocessor1…
 4    1.29e- 9 accura… binary     NaN         0 NA       Preprocessor1…
@@ -2506,11 +2506,11 @@ Computational engine: ranger </code></pre>
 <pre><code># A tibble: 5 x 8
    mtry min_n .metric  .estimator  mean     n  std_err .config        
   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1    11     2 accuracy binary     0.989     5 0.000780 Preprocessor1_…
-2    22     2 accuracy binary     0.987     5 0.000977 Preprocessor1_…
-3     1     2 accuracy binary     0.975     5 0.00192  Preprocessor1_…
-4    22    21 accuracy binary     0.974     5 0.00249  Preprocessor1_…
-5    11    21 accuracy binary     0.972     5 0.000761 Preprocessor1_…</code></pre>
+1    11     2 accuracy binary     0.991     5 0.000762 Preprocessor1_…
+2    22     2 accuracy binary     0.988     5 0.000577 Preprocessor1_…
+3     1     2 accuracy binary     0.979     5 0.00156  Preprocessor1_…
+4    22    21 accuracy binary     0.973     5 0.00149  Preprocessor1_…
+5    11    21 accuracy binary     0.972     5 0.00160  Preprocessor1_…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2522,8 +2522,8 @@ Computational engine: ranger </code></pre>
 <pre><code># A tibble: 2 x 8
    mtry min_n .metric  .estimator  mean     n  std_err .config        
   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1    11     2 accuracy binary     0.989     5 0.000780 Preprocessor1_…
-2    11     2 roc_auc  binary     0.996     5 0.00168  Preprocessor1_…</code></pre>
+1    11     2 accuracy binary     0.991     5 0.000762 Preprocessor1_…
+2    11     2 roc_auc  binary     0.997     5 0.000773 Preprocessor1_…</code></pre>
 </div>
 <p>The best tuning parameters are 11 for <code>mtry</code> and 2 for <code>min_n</code>.</p>
 <ol start="11" class="example" type="1">
@@ -2568,9 +2568,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0.4404021 , mean =  0.7258119 , max =  0.8420383  
+  -&gt; predicted values  :  numerical, min =  0.4254575 , mean =  0.7258208 , max =  0.8481551  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.8420383 , mean =  -4.298544e-07 , max =  0.5595979  
+  -&gt; residuals         :  numerical, min =  -0.8481551 , mean =  -9.366678e-06 , max =  0.5745425  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2605,17 +2605,17 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code>Measures for:  classification
-recall     : 0.9914273 
-precision  : 0.7340527 
-f1         : 0.8435449 
-accuracy   : 0.7330706 
-auc        : 0.7448202
+recall     : 0.9888556 
+precision  : 0.7378465 
+f1         : 0.8451065 
+accuracy   : 0.7369076 
+auc        : 0.7516712
 
 Residuals:
         0%        10%        20%        30%        40%        50% 
--0.8420383 -0.7180441 -0.6283219  0.1579617  0.1875870  0.2038640 
+-0.8481551 -0.7190913 -0.6148830  0.1518449  0.1823042  0.1991612 
        60%        70%        80%        90%       100% 
- 0.2356944  0.2568366  0.2819559  0.3478567  0.5595979 </code></pre>
+ 0.2323296  0.2544843  0.2809087  0.3505957  0.5745425 </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_rf_explain</span><span class='op'>)</span>
 <span class='va'>lending_rf_model_perf</span>
@@ -2648,8 +2648,44 @@ Residuals:
 <span class='va'>hist_plot</span> <span class='op'>+</span> <span class='va'>box_plot</span>
 </code></pre>
 </div>
-<p><img src="Assignment2_files/figure-html5/unnamed-chunk-24-1.png" width="624" /></p>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-24-1.png" width="960" /></p>
 </div>
+<p>[ADD PLOT INTERPRETATION]</p>
+<ol start="12" class="example" type="1">
+<li>Use <code>DALEX</code> functions to create a variable importance plot from this model. What are the most important variables?</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>lending_lasso_var_imp</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_parts.html'>model_parts</a></span><span class='op'>(</span>
+    <span class='va'>lending_lasso_explain</span>
+    <span class='op'>)</span>
+<span class='va'>lend_lasso_VIP_plot</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_lasso_var_imp</span>, show_boxplots <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>lending_rf_var_imp</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_parts.html'>model_parts</a></span><span class='op'>(</span>
+    <span class='va'>lending_rf_explain</span>
+    <span class='op'>)</span>
+<span class='va'>lend_rf_VIP_plot</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_rf_var_imp</span>, show_boxplots <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>lend_lasso_VIP_plot</span>
+</code></pre>
+</div>
+<img src="Assignment2_files/figure-html5/unnamed-chunk-25-1.png" width="960" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lend_rf_VIP_plot</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-25-2.png" width="960" /></p>
+</div>
+<p>Interest rate seems to be the most important variable by a large margin.</p>
+<ol start="13" class="example" type="1">
+<li>Write a function called <code>cp_profile</code> to make a CP profile. The function will take an explainer, a new observation, and a variable name as its arguments and create a CP profile for a quantitative predictor variable. You will need to use the <code>predict_profile()</code> function inside the function you create - put the variable name there so the plotting part is easier. You’ll also want to use <code>aes_string()</code> rather than <code>aes()</code> and quote the variables. Use the <code>cp_profile()</code> function to create one CP profile of your choosing. Be sure to choose a variable that is numeric, not integer. There seem to be issues with those that I’m looking into.</li>
+</ol>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
