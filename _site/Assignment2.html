@@ -2236,15 +2236,15 @@ Assignments
   <span class='fu'>step_rm</span><span class='op'>(</span><span class='va'>acc_now_delinq</span>, <span class='va'>delinq_amnt</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>,
                  fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_mutate</span><span class='op'>(</span>annual_inc <span class='op'>=</span>
-              <span class='fu'>case_when</span><span class='op'>(</span><span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>9875</span>                          <span class='op'>~</span> <span class='fl'>10</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>9875</span>   <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>40125</span>  <span class='op'>~</span> <span class='fl'>12</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>40125</span>  <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>85525</span>  <span class='op'>~</span> <span class='fl'>22</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>85525</span>  <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>163300</span> <span class='op'>~</span> <span class='fl'>24</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>163300</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>207350</span> <span class='op'>~</span> <span class='fl'>32</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>207350</span> <span class='op'>&amp;&amp;</span> <span class='va'>annual_inc</span> <span class='op'>&lt;=</span> <span class='fl'>518400</span> <span class='op'>~</span> <span class='fl'>35</span>,
-                        <span class='va'>annual_inc</span> <span class='op'>&gt;</span> <span class='fl'>518400</span>                         <span class='op'>~</span> <span class='fl'>37</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>step_mutate</span><span class='op'>(</span>annual_inc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>annual_inc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='co'># step_mutate(annual_inc =</span>
+  <span class='co'>#             case_when(annual_inc &lt;= 9875                          ~ 10,</span>
+  <span class='co'>#                       annual_inc &gt; 9875   &amp;&amp; annual_inc &lt;= 40125  ~ 12,</span>
+  <span class='co'>#                       annual_inc &gt; 40125  &amp;&amp; annual_inc &lt;= 85525  ~ 22,</span>
+  <span class='co'>#                       annual_inc &gt; 85525  &amp;&amp; annual_inc &lt;= 163300 ~ 24,</span>
+  <span class='co'>#                       annual_inc &gt; 163300 &amp;&amp; annual_inc &lt;= 207350 ~ 32,</span>
+  <span class='co'>#                       annual_inc &gt; 207350 &amp;&amp; annual_inc &lt;= 518400 ~ 35,</span>
+  <span class='co'>#                       annual_inc &gt; 518400                         ~ 37)) %&gt;%</span>
+  <span class='co'># step_mutate(annual_inc = as.factor(annual_inc)) %&gt;% </span>
   <span class='fu'>step_normalize</span><span class='op'>(</span><span class='fu'>all_predictors</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>step_dummy</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_outcomes</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
@@ -2254,22 +2254,23 @@ Assignments
 </code></pre>
 </div>
 <pre><code># A tibble: 9,643 x 113
-   funded_amnt int_rate delinq_2yrs inq_last_6mths revol_util
-         &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
- 1      0.0238   0.0798      -0.365         -0.706     0.604 
- 2      1.79    -0.300       -0.365         -0.706     1.21  
- 3     -0.655    0.516       -0.365          1.43      0.882 
- 4      0.102    0.0190      -0.365         -0.706     0.465 
- 5     -1.38    -1.17        -0.365         -0.706     1.05  
- 6     -0.655   -0.399       -0.365         -0.706     0.633 
- 7     -0.544   -1.57        -0.365         -0.706     0.0892
- 8     -0.0987  -0.837        1.82          -0.706    -0.789 
- 9     -1.10    -0.716       -0.365          1.43      0.804 
-10      0.458   -0.110        0.727         -0.706    -0.679 
-# … with 9,633 more rows, and 108 more variables: open_il_6m &lt;dbl&gt;,
-#   open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;, total_bal_il &lt;dbl&gt;,
-#   all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;, inq_last_12m &lt;dbl&gt;,
-#   num_il_tl &lt;dbl&gt;, total_il_high_credit_limit &lt;dbl&gt;, Class &lt;fct&gt;,
+   funded_amnt int_rate annual_inc delinq_2yrs inq_last_6mths
+         &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
+ 1      0.0232   0.0856     -0.867      -0.364         -0.706
+ 2      1.79    -0.295      -0.149      -0.364         -0.706
+ 3     -0.656    0.523      -0.149      -0.364          1.43 
+ 4      0.101    0.0248      0.415      -0.364         -0.706
+ 5     -1.38    -1.17       -0.574      -0.364         -0.706
+ 6     -0.656   -0.393      -0.925      -0.364         -0.706
+ 7     -0.545   -1.56       -0.285      -0.364         -0.706
+ 8     -0.0993  -0.832       2.10        1.80          -0.706
+ 9     -1.10    -0.711       0.182      -0.364          1.43 
+10      0.458   -0.104      -0.615       0.718         -0.706
+# … with 9,633 more rows, and 108 more variables: revol_util &lt;dbl&gt;,
+#   open_il_6m &lt;dbl&gt;, open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;,
+#   total_bal_il &lt;dbl&gt;, all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;,
+#   inq_last_12m &lt;dbl&gt;, num_il_tl &lt;dbl&gt;,
+#   total_il_high_credit_limit &lt;dbl&gt;, Class &lt;fct&gt;,
 #   term_term_60 &lt;dbl&gt;, sub_grade_A2 &lt;dbl&gt;, sub_grade_A3 &lt;dbl&gt;,
 #   sub_grade_A4 &lt;dbl&gt;, sub_grade_A5 &lt;dbl&gt;, sub_grade_B1 &lt;dbl&gt;,
 #   sub_grade_B2 &lt;dbl&gt;, sub_grade_B3 &lt;dbl&gt;, sub_grade_B4 &lt;dbl&gt;,
@@ -2299,9 +2300,8 @@ Assignments
 #   addr_state_VA &lt;dbl&gt;, addr_state_VT &lt;dbl&gt;, addr_state_WA &lt;dbl&gt;,
 #   addr_state_WI &lt;dbl&gt;, addr_state_WV &lt;dbl&gt;, addr_state_WY &lt;dbl&gt;,
 #   verification_status_Source_Verified &lt;dbl&gt;,
-#   verification_status_Verified &lt;dbl&gt;, annual_inc_X12 &lt;dbl&gt;,
-#   emp_length_emp_1 &lt;dbl&gt;, emp_length_emp_ge_10 &lt;dbl&gt;,
-#   emp_length_emp_2 &lt;dbl&gt;, …</code></pre>
+#   verification_status_Verified &lt;dbl&gt;, emp_length_emp_1 &lt;dbl&gt;,
+#   emp_length_emp_ge_10 &lt;dbl&gt;, emp_length_emp_2 &lt;dbl&gt;, …</code></pre>
 </div>
 <ol start="5" class="example" type="1">
 <li>Set up the LASSO model and workflow. We will tune the <code>penalty</code> parameter.</li>
@@ -2336,12 +2336,10 @@ Preprocessor: Recipe
 Model: logistic_reg()
 
 ── Preprocessor ──────────────────────────────────────────────────────
-6 Recipe Steps
+4 Recipe Steps
 
 ● step_rm()
 ● step_mutate_at()
-● step_mutate()
-● step_mutate()
 ● step_normalize()
 ● step_dummy()
 
@@ -2381,13 +2379,13 @@ Computational engine: glmnet </code></pre>
 </code></pre>
 </div>
 <pre><code># A tibble: 5 x 7
-      penalty .metric .estimator    mean     n  std_err .config       
-        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;         
-1    7.74e- 2 accura… binary       0.739     4  0.00656 Preprocessor1…
-2    1.00e+ 0 accura… binary       0.728     4  0.00555 Preprocessor1…
-3    1.00e-10 accura… binary     NaN         0 NA       Preprocessor1…
-4    1.29e- 9 accura… binary     NaN         0 NA       Preprocessor1…
-5    1.67e- 8 accura… binary     NaN         0 NA       Preprocessor1…</code></pre>
+       penalty .metric .estimator  mean     n std_err .config         
+         &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
+1     4.64e- 4 accura… binary     0.757     5 0.00561 Preprocessor1_M…
+2     1.00e-10 accura… binary     0.756     5 0.00613 Preprocessor1_M…
+3     1.29e- 9 accura… binary     0.756     5 0.00613 Preprocessor1_M…
+4     1.67e- 8 accura… binary     0.756     5 0.00613 Preprocessor1_M…
+5     2.15e- 7 accura… binary     0.756     5 0.00613 Preprocessor1_M…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2399,8 +2397,8 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 2 x 7
       penalty .metric  .estimator  mean     n std_err .config         
         &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    1.00e-10 accuracy binary       NaN     0      NA Preprocessor1_M…
-2    1.00e-10 roc_auc  binary       NaN     0      NA Preprocessor1_M…</code></pre>
+1    1.00e-10 accuracy binary     0.756     5 0.00613 Preprocessor1_M…
+2    1.00e-10 roc_auc  binary     0.774     5 0.00351 Preprocessor1_M…</code></pre>
 </div>
 <ol start="7" class="example" type="1">
 <li>Set up the recipe and the pre-processing steps to build a random forest model. You shouldn’t have to do as many steps. The only step you should need to do is making all integers numeric.</li>
@@ -2409,7 +2407,7 @@ Computational engine: glmnet </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ranger_recipe</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>Class</span> <span class='op'>~</span> <span class='va'>.</span>,
                          data <span class='op'>=</span> <span class='va'>lending_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_rm</span><span class='op'>(</span><span class='va'>acc_now_delinq</span>, <span class='va'>delinq_amnt</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='co'># step_rm(acc_now_delinq, delinq_amnt) %&gt;% </span>
   <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>,
                  fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
   <span class='co'># step_mutate(annual_inc =</span>
@@ -2459,9 +2457,8 @@ Preprocessor: Recipe
 Model: rand_forest()
 
 ── Preprocessor ──────────────────────────────────────────────────────
-2 Recipe Steps
+1 Recipe Step
 
-● step_rm()
 ● step_mutate_at()
 
 ── Model ─────────────────────────────────────────────────────────────
@@ -2506,11 +2503,11 @@ Computational engine: ranger </code></pre>
 <pre><code># A tibble: 5 x 8
    mtry min_n .metric  .estimator  mean     n  std_err .config        
   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1    11     2 accuracy binary     0.991     5 0.000762 Preprocessor1_…
-2    22     2 accuracy binary     0.988     5 0.000577 Preprocessor1_…
-3     1     2 accuracy binary     0.979     5 0.00156  Preprocessor1_…
-4    22    21 accuracy binary     0.973     5 0.00149  Preprocessor1_…
-5    11    21 accuracy binary     0.972     5 0.00160  Preprocessor1_…</code></pre>
+1    11     2 accuracy binary     0.990     5 0.00125  Preprocessor1_…
+2    22     2 accuracy binary     0.987     5 0.000906 Preprocessor1_…
+3    22    21 accuracy binary     0.973     5 0.00168  Preprocessor1_…
+4    11    21 accuracy binary     0.973     5 0.00178  Preprocessor1_…
+5    22    40 accuracy binary     0.946     5 0.00264  Preprocessor1_…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2520,10 +2517,10 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code># A tibble: 2 x 8
-   mtry min_n .metric  .estimator  mean     n  std_err .config        
-  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1    11     2 accuracy binary     0.991     5 0.000762 Preprocessor1_…
-2    11     2 roc_auc  binary     0.997     5 0.000773 Preprocessor1_…</code></pre>
+   mtry min_n .metric  .estimator  mean     n std_err .config         
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
+1    11     2 accuracy binary     0.990     5 0.00125 Preprocessor1_M…
+2    11     2 roc_auc  binary     0.997     5 0.00102 Preprocessor1_M…</code></pre>
 </div>
 <p>The best tuning parameters are 11 for <code>mtry</code> and 2 for <code>min_n</code>.</p>
 <ol start="11" class="example" type="1">
@@ -2542,8 +2539,18 @@ Computational engine: ranger </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>best_param_ranger</span> <span class='op'>&lt;-</span> <span class='va'>ranger_cv</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_best</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+
+<span class='va'>lending_ranger_final_wf</span> <span class='op'>&lt;-</span> <span class='va'>ranger_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>finalize_workflow</span><span class='op'>(</span><span class='va'>best_param_ranger</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
-<span class='va'>ranger_fit</span> <span class='op'>&lt;-</span> <span class='va'>ranger_workflow</span> <span class='op'>%&gt;%</span> 
+<span class='va'>ranger_fit</span> <span class='op'>&lt;-</span> <span class='va'>lending_ranger_final_wf</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>fit</span><span class='op'>(</span><span class='va'>lending_train</span><span class='op'>)</span>
 </code></pre>
 </div>
@@ -2568,9 +2575,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0.4254575 , mean =  0.7258208 , max =  0.8481551  
+  -&gt; predicted values  :  numerical, min =  0.007609927 , mean =  0.7258116 , max =  0.9996497  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.8481551 , mean =  -9.366678e-06 , max =  0.5745425  
+  -&gt; residuals         :  numerical, min =  -0.9632036 , mean =  -1.58873e-07 , max =  0.9923901  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2593,9 +2600,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0.7267438 , mean =  0.7267438 , max =  0.7267438  
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.7028311 , max =  1  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.7267438 , mean =  -0.0009322825 , max =  0.2732562  
+  -&gt; residuals         :  numerical, min =  -0.405 , mean =  0.0229804 , max =  0.31  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2605,17 +2612,19 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code>Measures for:  classification
-recall     : 0.9888556 
-precision  : 0.7378465 
-f1         : 0.8451065 
-accuracy   : 0.7369076 
-auc        : 0.7516712
+recall     : 0.9217031 
+precision  : 0.7895961 
+f1         : 0.8505505 
+accuracy   : 0.7649072 
+auc        : 0.78538
 
 Residuals:
-        0%        10%        20%        30%        40%        50% 
--0.8481551 -0.7190913 -0.6148830  0.1518449  0.1823042  0.1991612 
-       60%        70%        80%        90%       100% 
- 0.2323296  0.2544843  0.2809087  0.3505957  0.5745425 </code></pre>
+         0%         10%         20%         30%         40% 
+-0.96320356 -0.66737763 -0.45445512  0.01753696  0.06597717 
+        50%         60%         70%         80%         90% 
+ 0.10833539  0.15461591  0.21146154  0.29648964  0.41733631 
+       100% 
+ 0.99239007 </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_rf_explain</span><span class='op'>)</span>
 <span class='va'>lending_rf_model_perf</span>
@@ -2623,34 +2632,34 @@ Residuals:
 </div>
 <pre><code>Measures for:  classification
 recall     : 1 
-precision  : 0.7258115 
-f1         : 0.8411249 
-accuracy   : 0.7258115 
-auc        : 0.9241704
+precision  : 1 
+f1         : 1 
+accuracy   : 1 
+auc        : 1
 
 Residuals:
-        0%        10%        20%        30%        40%        50% 
--0.7267438 -0.7267438 -0.7267438  0.2732562  0.2732562  0.2732562 
-       60%        70%        80%        90%       100% 
- 0.2732562  0.2732562  0.2732562  0.2732562  0.2732562 </code></pre>
+    0%    10%    20%    30%    40%    50%    60%    70%    80%    90% 
+-0.405 -0.005  0.000  0.000  0.000  0.010  0.020  0.030  0.050  0.080 
+  100% 
+ 0.310 </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hist_plot</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_lasso_model_perf</span>,
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='co'>#lending_lasso_model_perf,</span>
        <span class='va'>lending_rf_model_perf</span>, 
        geom <span class='op'>=</span> <span class='st'>"histogram"</span><span class='op'>)</span>
 <span class='va'>box_plot</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>lending_lasso_model_perf</span>,
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='co'>#lending_lasso_model_perf,</span>
        <span class='va'>lending_rf_model_perf</span>, 
        geom <span class='op'>=</span> <span class='st'>"boxplot"</span><span class='op'>)</span>
 
 <span class='va'>hist_plot</span> <span class='op'>+</span> <span class='va'>box_plot</span>
 </code></pre>
 </div>
-<p><img src="Assignment2_files/figure-html5/unnamed-chunk-24-1.png" width="960" /></p>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-25-1.png" width="960" /></p>
 </div>
-<p>[ADD PLOT INTERPRETATION]</p>
+<p>The histogram is fairly normally distributed with a slight right skew towards positive residuals. The boxplot shows that there is a large amount of residual variance which is evidence by the RMSE being located outside of the IQR, as well as the long tail on the right.</p>
 <ol start="12" class="example" type="1">
 <li>Use <code>DALEX</code> functions to create a variable importance plot from this model. What are the most important variables?</li>
 </ol>
@@ -2675,18 +2684,198 @@ Residuals:
 <span class='va'>lend_lasso_VIP_plot</span>
 </code></pre>
 </div>
-<img src="Assignment2_files/figure-html5/unnamed-chunk-25-1.png" width="960" />
+<img src="Assignment2_files/figure-html5/unnamed-chunk-26-1.png" width="960" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lend_rf_VIP_plot</span>
 </code></pre>
 </div>
-<p><img src="Assignment2_files/figure-html5/unnamed-chunk-25-2.png" width="960" /></p>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-26-2.png" width="960" /></p>
 </div>
-<p>Interest rate seems to be the most important variable by a large margin.</p>
+<p>Interest rate seems to be the most important variable by a large margin for the LASSO. For the random forest, annual income and interest rate are also much more important than any of the other variables, with annual income being more important than interest rate, which is the opposite of the LASSO.</p>
 <ol start="13" class="example" type="1">
 <li>Write a function called <code>cp_profile</code> to make a CP profile. The function will take an explainer, a new observation, and a variable name as its arguments and create a CP profile for a quantitative predictor variable. You will need to use the <code>predict_profile()</code> function inside the function you create - put the variable name there so the plotting part is easier. You’ll also want to use <code>aes_string()</code> rather than <code>aes()</code> and quote the variables. Use the <code>cp_profile()</code> function to create one CP profile of your choosing. Be sure to choose a variable that is numeric, not integer. There seem to be issues with those that I’m looking into.</li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cp_profile</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>explainer</span>, <span class='va'>newObs</span>, <span class='va'>varName</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_profile.html'>predict_profile</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>explainer</span>,
+                  new_observation <span class='op'>=</span> <span class='va'>newObs</span>,
+                  variables <span class='op'>=</span> <span class='va'>varName</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>rename</span><span class='op'>(</span>yhat <span class='op'>=</span> <span class='va'>`_yhat_`</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes_string</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>varName</span>, y <span class='op'>=</span> <span class='st'>'yhat'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+    <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='fu'>cp_profile</span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>lending_rf_explain</span>, 
+           newObs <span class='op'>=</span> <span class='va'>lending_train</span> <span class='op'>%&gt;%</span> <span class='fu'>slice_sample</span><span class='op'>(</span><span class='op'>)</span>, 
+           varName <span class='op'>=</span> <span class='st'>'annual_inc'</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-28-1.png" width="624" /></p>
+</div>
+<ol start="14" class="example" type="1">
+<li>Use <code>DALEX</code> functions to create partial dependence plots (with the CP profiles in gray) for the 3-4 most important variables. If the important variables are categorical, you can instead make a CP profile for 3 observations in the dataset and discuss how you could go about constructing a partial dependence plot for a categorical variable (you don’t have to code it, but you can if you want an extra challenge). If it ever gives you an error that says, “Error: Can’t convert from <code>VARIABLE</code> to <code>VARIABLE</code> due to loss of precision”, then remove that variable from the list. I seem to have figured out why it’s doing that, but I don’t know how to fix it yet.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>rf_pdp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_profile.html'>model_profile</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>lending_rf_explain</span>, 
+                        variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'int_rate'</span>, <span class='st'>'annual_inc'</span>, <span class='st'>'open_il_12m'</span>, <span class='st'>'open_il_24m'</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>rf_pdp</span>,
+     variables <span class='op'>=</span> <span class='st'>'int_rate'</span>,
+     geom <span class='op'>=</span> <span class='st'>'profiles'</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment2_files/figure-html5/unnamed-chunk-29-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>rf_pdp</span>,
+     variables <span class='op'>=</span> <span class='st'>'annual_inc'</span>,
+     geom <span class='op'>=</span> <span class='st'>'profiles'</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment2_files/figure-html5/unnamed-chunk-29-2.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>rf_pdp</span>,
+     variables <span class='op'>=</span> <span class='st'>'open_il_12m'</span>,
+     geom <span class='op'>=</span> <span class='st'>'profiles'</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment2_files/figure-html5/unnamed-chunk-29-3.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>rf_pdp</span>,
+     variables <span class='op'>=</span> <span class='st'>'open_il_24m'</span>,
+     geom <span class='op'>=</span> <span class='st'>'profiles'</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-29-4.png" width="624" /></p>
+</div>
+<ol start="15" class="example" type="1">
+<li>Fit one more model type of your choosing that will feed into the stacking model.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_knn_mod</span> <span class='op'>&lt;-</span>
+  <span class='fu'>nearest_neighbor</span><span class='op'>(</span>
+    neighbors <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='st'>"k"</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"kknn"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span>
+
+<span class='va'>lending_knn_workflow</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>lending_knn_mod</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>lending_recipe</span><span class='op'>)</span>
+
+<span class='va'>lending_knn_tune</span> <span class='op'>&lt;-</span> <span class='va'>lending_knn_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>tune_grid</span><span class='op'>(</span>resamples <span class='op'>=</span> <span class='va'>lending_cv</span>, 
+            grid <span class='op'>=</span> <span class='fl'>4</span>,
+            control <span class='op'>=</span> <span class='va'>ctrl_grid</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ol start="16" class="example" type="1">
+<li>Create a model stack with the candidate models from the previous parts of the exercise and use the <code>blend_predictions()</code> function to find the coefficients of the stacked model. Create a plot examining the performance metrics for the different penalty parameters to assure you have captured the best one. If not, adjust the penalty. (HINT: use the <code>autoplot()</code> function). Which models are contributing most?</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>lending_stack</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/stacks.html'>stacks</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/add_candidates.html'>add_candidates</a></span><span class='op'>(</span><span class='va'>ranger_cv</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/add_candidates.html'>add_candidates</a></span><span class='op'>(</span><span class='va'>lending_lasso_tune</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/add_candidates.html'>add_candidates</a></span><span class='op'>(</span><span class='va'>lending_knn_tune</span><span class='op'>)</span>
+
+<span class='va'>lending_blend</span> <span class='op'>&lt;-</span> <span class='va'>lending_stack</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/blend_predictions.html'>blend_predictions</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>lending_blend</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+  member                             type              weight
+  &lt;chr&gt;                              &lt;chr&gt;              &lt;dbl&gt;
+1 .pred_good_lending_lasso_tune_1_10 logistic_reg     105.   
+2 .pred_good_ranger_cv_1_4           rand_forest       12.1  
+3 .pred_good_ranger_cv_1_7           rand_forest        2.43 
+4 .pred_good_lending_knn_tune_1_1    nearest_neighbor   0.881</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>lending_blend</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment2_files/figure-html5/unnamed-chunk-31-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>lending_blend</span>, type <span class='op'>=</span> <span class='st'>"weights"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-31-2.png" width="624" /></p>
+</div>
+<p>The random forest models are contributing the most, with the knn model contributing slightly.</p>
+<ol start="17" class="example" type="1">
+<li>Fit the final stacked model using <code>fit_members()</code>. Apply the model to the test data and report the accuracy and area under the curve. Create a graph of the ROC and construct a confusion matrix. Comment on what you see. Save this final model using the <code>saveRDS()</code> function - see the Use the model section of the tidymodels intro. We are going to use the model in the next part. You’ll want to save it in the folder where you create your shiny app.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_final_stack</span> <span class='op'>&lt;-</span> <span class='va'>lending_blend</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/stacks/man/fit_members.html'>fit_members</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>lending_final_stack</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+  member                             type              weight
+  &lt;chr&gt;                              &lt;chr&gt;              &lt;dbl&gt;
+1 .pred_good_lending_lasso_tune_1_10 logistic_reg     105.   
+2 .pred_good_ranger_cv_1_4           rand_forest       12.1  
+3 .pred_good_ranger_cv_1_7           rand_forest        2.43 
+4 .pred_good_lending_knn_tune_1_1    nearest_neighbor   0.881</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>lending_final_stack</span>, file <span class='op'>=</span> <span class='st'>"lending_final_stack"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_stack_test</span> <span class='op'>&lt;-</span> <span class='va'>lending_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>bind_cols</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>lending_final_stack</span>, new_data <span class='op'>=</span> <span class='va'>lending_test</span>, type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>bind_cols</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>lending_final_stack</span>, new_data <span class='op'>=</span> <span class='va'>lending_test</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>lending_stack_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>accuracy</span><span class='op'>(</span><span class='va'>.pred_class</span>, <span class='va'>Class</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.999</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_stack_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>roc_auc</span><span class='op'>(</span><span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary          1.00</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='fu'>roc_curve</span><span class='op'>(</span><span class='va'>lending_stack_test</span>, <span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment2_files/figure-html5/unnamed-chunk-33-1.png" width="624" /></p>
+</div>
+<h2 id="shiny-app">Shiny App</h2>
+<p>[ADD DESCRIPTION OF APP]</p>
+<p><a href="https://github.com/alexdenzler/STAT494_HW2_ShinyApp">Here</a> is the GitHub repository for my Shiny app. <a href="INSERT%20LINK%20TO%20SHINY%20APP">Here</a> is the link to my Shiny app.</p>
+<h2 id="coded-bias">Coded Bias</h2>
+<ul>
+<li>The part of the film that impacted me the most was the part where the high school aged kid was stopped on the street in London because the facial recognition technology misidentified him due to his race. It provided me evidence for how much of a problem this truly is. I was most surprised by how widespread facial recognition was used in China, and how China uses it to create a citizen rating. I was also surprised at how the United States does this without nearly as much transparency, which is a huge problem in my eyes. It was truly shocking how transparent China is about facial recognition software uses, and how some citizens are okay with what China is doing. I was also shocked that there is no AI or Machine Learning Algorithm regulation in the United States. Overall, I felt generally unsettled by the documentary, as it made me fear for the future of algorithm usage in the United States.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
