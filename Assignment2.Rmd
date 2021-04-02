@@ -464,12 +464,14 @@ autoplot(roc_curve(lending_stack_test, Class, .pred_bad))
 ```
 
 
+
+
 ## Shiny App
 
-[ADD DESCRIPTION OF APP]
+The shiny app is not finished but a link to the GitHub page is provided to show progress.
 
-[Here](https://github.com/alexdenzler/STAT494_HW2_ShinyApp) is the GitHub repository for my Shiny app.
-[Here](INSERT LINK TO SHINY APP) is the link to my Shiny app.
+* [Here](https://github.com/alexdenzler/STAT494_HW2_ShinyApp) is the GitHub repository for my Shiny app.
+<!-- * [Here](INSERT LINK TO SHINY APP) is the link to my Shiny app. -->
 
 ## Coded Bias
 * The part of the film that impacted me the most was the part where the high school aged kid was stopped on the street in London because the facial recognition technology misidentified him due to his race. It provided me evidence for how much of a problem this truly is. I was most surprised by how widespread facial recognition was used in China, and how China uses it to create a citizen rating. I was also surprised at how the United States does this without nearly as much transparency, which is a huge problem in my eyes. It was truly shocking how transparent China is about facial recognition software uses, and how some citizens are okay with what China is doing. I was also shocked that there is no AI or Machine Learning Algorithm regulation in the United States. Overall, I felt generally unsettled by the documentary, as it made me fear for the future of algorithm usage in the United States.

@@ -2256,16 +2256,16 @@ Assignments
 <pre><code># A tibble: 9,643 x 113
    funded_amnt int_rate annual_inc delinq_2yrs inq_last_6mths
          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
- 1      0.0232   0.0856     -0.867      -0.364         -0.706
- 2      1.79    -0.295      -0.149      -0.364         -0.706
- 3     -0.656    0.523      -0.149      -0.364          1.43 
- 4      0.101    0.0248      0.415      -0.364         -0.706
- 5     -1.38    -1.17       -0.574      -0.364         -0.706
- 6     -0.656   -0.393      -0.925      -0.364         -0.706
- 7     -0.545   -1.56       -0.285      -0.364         -0.706
- 8     -0.0993  -0.832       2.10        1.80          -0.706
- 9     -1.10    -0.711       0.182      -0.364          1.43 
-10      0.458   -0.104      -0.615       0.718         -0.706
+ 1      0.0248   0.0886     -0.858      -0.365         -0.705
+ 2      1.80    -0.292      -0.149      -0.365         -0.705
+ 3     -0.655    0.527      -0.149      -0.365          1.46 
+ 4      0.103    0.0277      0.407      -0.365         -0.705
+ 5     -1.38    -1.17       -0.569      -0.365         -0.705
+ 6     -0.655   -0.391      -0.916      -0.365         -0.705
+ 7     -0.544   -1.56       -0.283      -0.365         -0.705
+ 8     -0.0978  -0.831       2.08        1.82          -0.705
+ 9     -1.10    -0.710       0.177      -0.365          1.46 
+10      0.459   -0.102      -0.609       0.726         -0.705
 # … with 9,633 more rows, and 108 more variables: revol_util &lt;dbl&gt;,
 #   open_il_6m &lt;dbl&gt;, open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;,
 #   total_bal_il &lt;dbl&gt;, all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;,
@@ -2381,11 +2381,11 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 5 x 7
        penalty .metric .estimator  mean     n std_err .config         
          &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1     4.64e- 4 accura… binary     0.757     5 0.00561 Preprocessor1_M…
-2     1.00e-10 accura… binary     0.756     5 0.00613 Preprocessor1_M…
-3     1.29e- 9 accura… binary     0.756     5 0.00613 Preprocessor1_M…
-4     1.67e- 8 accura… binary     0.756     5 0.00613 Preprocessor1_M…
-5     2.15e- 7 accura… binary     0.756     5 0.00613 Preprocessor1_M…</code></pre>
+1     5.99e- 3 accura… binary     0.756     5 0.00543 Preprocessor1_M…
+2     4.64e- 4 accura… binary     0.756     5 0.00628 Preprocessor1_M…
+3     3.59e- 5 accura… binary     0.755     5 0.00648 Preprocessor1_M…
+4     1.00e-10 accura… binary     0.754     5 0.00658 Preprocessor1_M…
+5     1.29e- 9 accura… binary     0.754     5 0.00658 Preprocessor1_M…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2397,8 +2397,8 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 2 x 7
       penalty .metric  .estimator  mean     n std_err .config         
         &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    1.00e-10 accuracy binary     0.756     5 0.00613 Preprocessor1_M…
-2    1.00e-10 roc_auc  binary     0.774     5 0.00351 Preprocessor1_M…</code></pre>
+1    1.00e-10 accuracy binary     0.754     5 0.00658 Preprocessor1_M…
+2    1.00e-10 roc_auc  binary     0.769     5 0.00391 Preprocessor1_M…</code></pre>
 </div>
 <ol start="7" class="example" type="1">
 <li>Set up the recipe and the pre-processing steps to build a random forest model. You shouldn’t have to do as many steps. The only step you should need to do is making all integers numeric.</li>
@@ -2501,13 +2501,13 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code># A tibble: 5 x 8
-   mtry min_n .metric  .estimator  mean     n  std_err .config        
-  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1    11     2 accuracy binary     0.990     5 0.00125  Preprocessor1_…
-2    22     2 accuracy binary     0.987     5 0.000906 Preprocessor1_…
-3    22    21 accuracy binary     0.973     5 0.00168  Preprocessor1_…
-4    11    21 accuracy binary     0.973     5 0.00178  Preprocessor1_…
-5    22    40 accuracy binary     0.946     5 0.00264  Preprocessor1_…</code></pre>
+   mtry min_n .metric  .estimator  mean     n std_err .config         
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
+1    11     2 accuracy binary     0.989     5 0.00124 Preprocessor1_M…
+2    22     2 accuracy binary     0.987     5 0.00177 Preprocessor1_M…
+3    22    21 accuracy binary     0.973     5 0.00270 Preprocessor1_M…
+4    11    21 accuracy binary     0.972     5 0.00158 Preprocessor1_M…
+5    22    40 accuracy binary     0.947     5 0.00360 Preprocessor1_M…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2519,8 +2519,8 @@ Computational engine: ranger </code></pre>
 <pre><code># A tibble: 2 x 8
    mtry min_n .metric  .estimator  mean     n std_err .config         
   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    11     2 accuracy binary     0.990     5 0.00125 Preprocessor1_M…
-2    11     2 roc_auc  binary     0.997     5 0.00102 Preprocessor1_M…</code></pre>
+1    11     2 accuracy binary     0.989     5 0.00124 Preprocessor1_M…
+2    11     2 roc_auc  binary     0.993     5 0.00226 Preprocessor1_M…</code></pre>
 </div>
 <p>The best tuning parameters are 11 for <code>mtry</code> and 2 for <code>min_n</code>.</p>
 <ol start="11" class="example" type="1">
@@ -2575,9 +2575,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0.007609927 , mean =  0.7258116 , max =  0.9996497  
+  -&gt; predicted values  :  numerical, min =  0.01548382 , mean =  0.7258176 , max =  0.9741732  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.9632036 , mean =  -1.58873e-07 , max =  0.9923901  
+  -&gt; residuals         :  numerical, min =  -0.9341077 , mean =  -6.156144e-06 , max =  0.9845162  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2600,9 +2600,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0 , mean =  0.7028311 , max =  1  
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.7022892 , max =  1  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.405 , mean =  0.0229804 , max =  0.31  
+  -&gt; residuals         :  numerical, min =  -0.435 , mean =  0.02352224 , max =  0.31  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2612,19 +2612,19 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code>Measures for:  classification
-recall     : 0.9217031 
-precision  : 0.7895961 
-f1         : 0.8505505 
-accuracy   : 0.7649072 
-auc        : 0.78538
+recall     : 0.9388484 
+precision  : 0.7772652 
+f1         : 0.8504498 
+accuracy   : 0.7603443 
+auc        : 0.7711454
 
 Residuals:
          0%         10%         20%         30%         40% 
--0.96320356 -0.66737763 -0.45445512  0.01753696  0.06597717 
+-0.93410769 -0.68328016 -0.48796309  0.06345582  0.09743233 
         50%         60%         70%         80%         90% 
- 0.10833539  0.15461591  0.21146154  0.29648964  0.41733631 
+ 0.13030053  0.16907875  0.21763717  0.29563455  0.40101433 
        100% 
- 0.99239007 </code></pre>
+ 0.98451618 </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_rf_explain</span><span class='op'>)</span>
 <span class='va'>lending_rf_model_perf</span>
@@ -2639,7 +2639,7 @@ auc        : 1
 
 Residuals:
     0%    10%    20%    30%    40%    50%    60%    70%    80%    90% 
--0.405 -0.005  0.000  0.000  0.000  0.010  0.020  0.030  0.050  0.080 
+-0.435 -0.005  0.000  0.000  0.000  0.010  0.020  0.030  0.050  0.080 
   100% 
  0.310 </code></pre>
 </div>
@@ -2797,13 +2797,12 @@ Residuals:
 <span class='va'>lending_blend</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 4 x 3
-  member                             type              weight
-  &lt;chr&gt;                              &lt;chr&gt;              &lt;dbl&gt;
-1 .pred_good_lending_lasso_tune_1_10 logistic_reg     105.   
-2 .pred_good_ranger_cv_1_4           rand_forest       12.1  
-3 .pred_good_ranger_cv_1_7           rand_forest        2.43 
-4 .pred_good_lending_knn_tune_1_1    nearest_neighbor   0.881</code></pre>
+<pre><code># A tibble: 3 x 3
+  member                          type             weight
+  &lt;chr&gt;                           &lt;chr&gt;             &lt;dbl&gt;
+1 .pred_good_ranger_cv_1_4        rand_forest       7.80 
+2 .pred_good_ranger_cv_1_7        rand_forest       4.76 
+3 .pred_good_lending_knn_tune_1_1 nearest_neighbor  0.569</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>lending_blend</span><span class='op'>)</span>
 </code></pre>
@@ -2827,13 +2826,12 @@ Residuals:
 <span class='va'>lending_final_stack</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 4 x 3
-  member                             type              weight
-  &lt;chr&gt;                              &lt;chr&gt;              &lt;dbl&gt;
-1 .pred_good_lending_lasso_tune_1_10 logistic_reg     105.   
-2 .pred_good_ranger_cv_1_4           rand_forest       12.1  
-3 .pred_good_ranger_cv_1_7           rand_forest        2.43 
-4 .pred_good_lending_knn_tune_1_1    nearest_neighbor   0.881</code></pre>
+<pre><code># A tibble: 3 x 3
+  member                          type             weight
+  &lt;chr&gt;                           &lt;chr&gt;             &lt;dbl&gt;
+1 .pred_good_ranger_cv_1_4        rand_forest       7.80 
+2 .pred_good_ranger_cv_1_7        rand_forest       4.76 
+3 .pred_good_lending_knn_tune_1_1 nearest_neighbor  0.569</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>lending_final_stack</span>, file <span class='op'>=</span> <span class='st'>"lending_final_stack"</span><span class='op'>)</span>
 </code></pre>
@@ -2852,7 +2850,7 @@ Residuals:
 <pre><code># A tibble: 1 x 3
   .metric  .estimator .estimate
   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.999</code></pre>
+1 accuracy binary         0.998</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_stack_test</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>roc_auc</span><span class='op'>(</span><span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span>
@@ -2861,7 +2859,7 @@ Residuals:
 <pre><code># A tibble: 1 x 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 roc_auc binary          1.00</code></pre>
+1 roc_auc binary         0.998</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='fu'>roc_curve</span><span class='op'>(</span><span class='va'>lending_stack_test</span>, <span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
@@ -2869,8 +2867,10 @@ Residuals:
 <p><img src="Assignment2_files/figure-html5/unnamed-chunk-33-1.png" width="624" /></p>
 </div>
 <h2 id="shiny-app">Shiny App</h2>
-<p>[ADD DESCRIPTION OF APP]</p>
-<p><a href="https://github.com/alexdenzler/STAT494_HW2_ShinyApp">Here</a> is the GitHub repository for my Shiny app. <a href="INSERT%20LINK%20TO%20SHINY%20APP">Here</a> is the link to my Shiny app.</p>
+<p>The shiny app is not finished but a link to the GitHub page is provided to show progress.</p>
+<ul>
+<li><a href="https://github.com/alexdenzler/STAT494_HW2_ShinyApp">Here</a> is the GitHub repository for my Shiny app. <!-- * [Here](INSERT LINK TO SHINY APP) is the link to my Shiny app. --></li>
+</ul>
 <h2 id="coded-bias">Coded Bias</h2>
 <ul>
 <li>The part of the film that impacted me the most was the part where the high school aged kid was stopped on the street in London because the facial recognition technology misidentified him due to his race. It provided me evidence for how much of a problem this truly is. I was most surprised by how widespread facial recognition was used in China, and how China uses it to create a citizen rating. I was also surprised at how the United States does this without nearly as much transparency, which is a huge problem in my eyes. It was truly shocking how transparent China is about facial recognition software uses, and how some citizens are okay with what China is doing. I was also shocked that there is no AI or Machine Learning Algorithm regulation in the United States. Overall, I felt generally unsettled by the documentary, as it made me fear for the future of algorithm usage in the United States.</li>
