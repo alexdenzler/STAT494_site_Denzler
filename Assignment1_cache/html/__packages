@@ -24,3 +24,5 @@ naniar
 vip
 Matrix
 glmnet
+rlang
+vctrs
