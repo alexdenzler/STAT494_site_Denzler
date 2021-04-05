@@ -2095,7 +2095,7 @@ Assignments
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span>        <span class='co'># for modeling</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>stacks</span><span class='op'>)</span>            <span class='co'># for stacking models</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/njtierney/naniar'>naniar</a></span><span class='op'>)</span>            <span class='co'># for analyzing missing values</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>         <span class='co'># for date manipulation</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>         <span class='co'># for date manipulation</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/moderndive/moderndive/issues'>moderndive</a></span><span class='op'>)</span>        <span class='co'># for King County housing data</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span>               <span class='co'># for variable importance plots</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dalex.drwhy.ai'>DALEX</a></span><span class='op'>)</span>             <span class='co'># for model interpretation</span>
@@ -2256,16 +2256,16 @@ Assignments
 <pre><code># A tibble: 9,643 x 113
    funded_amnt int_rate annual_inc delinq_2yrs inq_last_6mths
          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
- 1      0.0248   0.0886     -0.858      -0.365         -0.705
- 2      1.80    -0.292      -0.149      -0.365         -0.705
- 3     -0.655    0.527      -0.149      -0.365          1.46 
- 4      0.103    0.0277      0.407      -0.365         -0.705
- 5     -1.38    -1.17       -0.569      -0.365         -0.705
- 6     -0.655   -0.391      -0.916      -0.365         -0.705
- 7     -0.544   -1.56       -0.283      -0.365         -0.705
- 8     -0.0978  -0.831       2.08        1.82          -0.705
- 9     -1.10    -0.710       0.177      -0.365          1.46 
-10      0.459   -0.102      -0.609       0.726         -0.705
+ 1      0.0179   0.0855     -0.880      -0.363         -0.705
+ 2      1.79    -0.294      -0.155      -0.363         -0.705
+ 3     -0.661    0.522      -0.155      -0.363          1.47 
+ 4      0.0957   0.0249      0.413      -0.363         -0.705
+ 5     -1.38    -1.17       -0.584      -0.363         -0.705
+ 6     -0.661   -0.392      -0.938      -0.363         -0.705
+ 7     -0.550   -1.56       -0.292      -0.363         -0.705
+ 8     -0.105   -0.830       2.12        1.83          -0.705
+ 9     -1.11    -0.709       0.178      -0.363          1.47 
+10      0.452   -0.104      -0.625       0.735         -0.705
 # … with 9,633 more rows, and 108 more variables: revol_util &lt;dbl&gt;,
 #   open_il_6m &lt;dbl&gt;, open_il_12m &lt;dbl&gt;, open_il_24m &lt;dbl&gt;,
 #   total_bal_il &lt;dbl&gt;, all_util &lt;dbl&gt;, inq_fi &lt;dbl&gt;,
@@ -2381,11 +2381,11 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 5 x 7
        penalty .metric .estimator  mean     n std_err .config         
          &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1     5.99e- 3 accura… binary     0.756     5 0.00543 Preprocessor1_M…
-2     4.64e- 4 accura… binary     0.756     5 0.00628 Preprocessor1_M…
-3     3.59e- 5 accura… binary     0.755     5 0.00648 Preprocessor1_M…
-4     1.00e-10 accura… binary     0.754     5 0.00658 Preprocessor1_M…
-5     1.29e- 9 accura… binary     0.754     5 0.00658 Preprocessor1_M…</code></pre>
+1     1.00e-10 accura… binary     0.755     5 0.00577 Preprocessor1_M…
+2     1.29e- 9 accura… binary     0.755     5 0.00577 Preprocessor1_M…
+3     1.67e- 8 accura… binary     0.755     5 0.00577 Preprocessor1_M…
+4     2.15e- 7 accura… binary     0.755     5 0.00577 Preprocessor1_M…
+5     2.78e- 6 accura… binary     0.755     5 0.00577 Preprocessor1_M…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2397,8 +2397,8 @@ Computational engine: glmnet </code></pre>
 <pre><code># A tibble: 2 x 7
       penalty .metric  .estimator  mean     n std_err .config         
         &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    1.00e-10 accuracy binary     0.754     5 0.00658 Preprocessor1_M…
-2    1.00e-10 roc_auc  binary     0.769     5 0.00391 Preprocessor1_M…</code></pre>
+1    1.00e-10 accuracy binary     0.755     5 0.00577 Preprocessor1_M…
+2    1.00e-10 roc_auc  binary     0.772     5 0.00440 Preprocessor1_M…</code></pre>
 </div>
 <ol start="7" class="example" type="1">
 <li>Set up the recipe and the pre-processing steps to build a random forest model. You shouldn’t have to do as many steps. The only step you should need to do is making all integers numeric.</li>
@@ -2501,13 +2501,13 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code># A tibble: 5 x 8
-   mtry min_n .metric  .estimator  mean     n std_err .config         
-  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    11     2 accuracy binary     0.989     5 0.00124 Preprocessor1_M…
-2    22     2 accuracy binary     0.987     5 0.00177 Preprocessor1_M…
-3    22    21 accuracy binary     0.973     5 0.00270 Preprocessor1_M…
-4    11    21 accuracy binary     0.972     5 0.00158 Preprocessor1_M…
-5    22    40 accuracy binary     0.947     5 0.00360 Preprocessor1_M…</code></pre>
+   mtry min_n .metric  .estimator  mean     n  std_err .config        
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
+1    11     2 accuracy binary     0.990     5 0.00116  Preprocessor1_…
+2    22     2 accuracy binary     0.990     5 0.000775 Preprocessor1_…
+3    22    21 accuracy binary     0.976     5 0.00285  Preprocessor1_…
+4    11    21 accuracy binary     0.973     5 0.00238  Preprocessor1_…
+5    22    40 accuracy binary     0.955     5 0.00407  Preprocessor1_…</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2517,10 +2517,10 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code># A tibble: 2 x 8
-   mtry min_n .metric  .estimator  mean     n std_err .config         
-  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;           
-1    11     2 accuracy binary     0.989     5 0.00124 Preprocessor1_M…
-2    11     2 roc_auc  binary     0.993     5 0.00226 Preprocessor1_M…</code></pre>
+   mtry min_n .metric  .estimator  mean     n  std_err .config        
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;          
+1    11     2 accuracy binary     0.990     5 0.00116  Preprocessor1_…
+2    11     2 roc_auc  binary     0.996     5 0.000654 Preprocessor1_…</code></pre>
 </div>
 <p>The best tuning parameters are 11 for <code>mtry</code> and 2 for <code>min_n</code>.</p>
 <ol start="11" class="example" type="1">
@@ -2575,9 +2575,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0.01548382 , mean =  0.7258176 , max =  0.9741732  
+  -&gt; predicted values  :  numerical, min =  0.00669341 , mean =  0.7258114 , max =  0.9999645  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.9341077 , mean =  -6.156144e-06 , max =  0.9845162  
+  -&gt; residuals         :  numerical, min =  -0.9732356 , mean =  2.01963e-08 , max =  0.9933066  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2600,9 +2600,9 @@ Computational engine: ranger </code></pre>
   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
   -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task classification ( [33m default [39m ) 
   -&gt; model_info        :  type set to  classification 
-  -&gt; predicted values  :  numerical, min =  0 , mean =  0.7022892 , max =  1  
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.7027165 , max =  1  
   -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.435 , mean =  0.02352224 , max =  0.31  
+  -&gt; residuals         :  numerical, min =  -0.47 , mean =  0.02309499 , max =  0.305  
  [32m A new explainer has been created! [39m </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
@@ -2612,19 +2612,19 @@ Computational engine: ranger </code></pre>
 </code></pre>
 </div>
 <pre><code>Measures for:  classification
-recall     : 0.9388484 
-precision  : 0.7772652 
-f1         : 0.8504498 
-accuracy   : 0.7603443 
-auc        : 0.7711454
+recall     : 0.9191313 
+precision  : 0.7871039 
+f1         : 0.8480095 
+accuracy   : 0.7608628 
+auc        : 0.7857364
 
 Residuals:
          0%         10%         20%         30%         40% 
--0.93410769 -0.68328016 -0.48796309  0.06345582  0.09743233 
+-0.97323555 -0.68664042 -0.44754833  0.01096773  0.06608087 
         50%         60%         70%         80%         90% 
- 0.13030053  0.16907875  0.21763717  0.29563455  0.40101433 
+ 0.11122639  0.15475951  0.20947283  0.29168175  0.41775015 
        100% 
- 0.98451618 </code></pre>
+ 0.99330659 </code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_rf_model_perf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>lending_rf_explain</span><span class='op'>)</span>
 <span class='va'>lending_rf_model_perf</span>
@@ -2639,9 +2639,9 @@ auc        : 1
 
 Residuals:
     0%    10%    20%    30%    40%    50%    60%    70%    80%    90% 
--0.435 -0.005  0.000  0.000  0.000  0.010  0.020  0.030  0.050  0.080 
+-0.470 -0.005  0.000  0.000  0.000  0.010  0.020  0.030  0.050  0.080 
   100% 
- 0.310 </code></pre>
+ 0.305 </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2797,12 +2797,11 @@ Residuals:
 <span class='va'>lending_blend</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 3 x 3
-  member                          type             weight
-  &lt;chr&gt;                           &lt;chr&gt;             &lt;dbl&gt;
-1 .pred_good_ranger_cv_1_4        rand_forest       7.80 
-2 .pred_good_ranger_cv_1_7        rand_forest       4.76 
-3 .pred_good_lending_knn_tune_1_1 nearest_neighbor  0.569</code></pre>
+<pre><code># A tibble: 2 x 3
+  member                   type        weight
+  &lt;chr&gt;                    &lt;chr&gt;        &lt;dbl&gt;
+1 .pred_good_ranger_cv_1_4 rand_forest  4.16 
+2 .pred_good_ranger_cv_1_7 rand_forest  0.738</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>lending_blend</span><span class='op'>)</span>
 </code></pre>
@@ -2826,12 +2825,11 @@ Residuals:
 <span class='va'>lending_final_stack</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 3 x 3
-  member                          type             weight
-  &lt;chr&gt;                           &lt;chr&gt;             &lt;dbl&gt;
-1 .pred_good_ranger_cv_1_4        rand_forest       7.80 
-2 .pred_good_ranger_cv_1_7        rand_forest       4.76 
-3 .pred_good_lending_knn_tune_1_1 nearest_neighbor  0.569</code></pre>
+<pre><code># A tibble: 2 x 3
+  member                   type        weight
+  &lt;chr&gt;                    &lt;chr&gt;        &lt;dbl&gt;
+1 .pred_good_ranger_cv_1_4 rand_forest  4.16 
+2 .pred_good_ranger_cv_1_7 rand_forest  0.738</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>saveRDS</a></span><span class='op'>(</span><span class='va'>lending_final_stack</span>, file <span class='op'>=</span> <span class='st'>"lending_final_stack"</span><span class='op'>)</span>
 </code></pre>
@@ -2850,7 +2848,7 @@ Residuals:
 <pre><code># A tibble: 1 x 3
   .metric  .estimator .estimate
   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.998</code></pre>
+1 accuracy binary         0.996</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lending_stack_test</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>roc_auc</span><span class='op'>(</span><span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span>
@@ -2859,7 +2857,7 @@ Residuals:
 <pre><code># A tibble: 1 x 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 roc_auc binary         0.998</code></pre>
+1 roc_auc binary         0.999</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='fu'>roc_curve</span><span class='op'>(</span><span class='va'>lending_stack_test</span>, <span class='va'>Class</span>, <span class='va'>.pred_bad</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
