@@ -62,9 +62,9 @@ house_prices <- house_prices %>%
 ```
 
 
-**Tasks**
+### Part 1
 
-  1. Choose 3 new observations and do the following for each observation:
+  Choose 3 new observations and do the following for each observation:
   * Construct a break-down plot using the default ordering. Interpret the resulting graph. Which variables contribute most to each observation’s prediction?
   * Construct a SHAP graph and interpret it. Does it tell a similar story to the break-down plot?
   * Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than Lisa used in the example.
@@ -126,6 +126,8 @@ new_obs3 <- house_test %>% slice(3)
 10^(new_obs3$log_price)
 ```
   
+#### Break-Down Plots
+  
 ```{r}
 house_pp_rf1 <- predict_parts(explainer = house_rf_explain,
                        new_observation = new_obs1,
@@ -144,30 +146,109 @@ plot(house_pp_rf2)
 plot(house_pp_rf3)
 ```
 
-* The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or \$462,381. We  see that holding constant at 6 affects the overall average price the most, and decreases the log price by 0.03, or \$30,861.90. The predicted log price for this observation is 5.577, or \$377,572.20.
+  * The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or \$462,381. We  see that holding constant at 6 affects the overall average price the most, and decreases the log price by 0.03, or \$30,861.90. The predicted log price for this observation is 5.577, or \$377,572.20.
 
-* The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or \$137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or \$727,779.80.
+  * The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or \$137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or \$727,779.80.
 
-* The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or \$67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or \$288,403.20.
+  * The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or \$67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or \$288,403.20.
 
 
-  
-```{r}
-house_rf_bdp1 <- house_pp_rf1 %>% 
-  as_tibble() %>% 
-  select(variable, contribution)
+#### Shapley Additive Explanationss (SHAP) Plots
 
-house_rf_bdp2 <- house_pp_rf2 %>% 
-  as_tibble() %>% 
-  select(variable, contribution)
+```{r, cache=TRUE}
+house_rf_shap1 <-predict_parts(explainer = house_rf_explain,
+                        new_observation = new_obs1,
+                        type = "shap",
+                        B = 10
+)
 
-house_rf_bdp3 <- house_pp_rf3 %>% 
-  as_tibble() %>% 
-  select(variable, contribution)
+house_rf_shap2 <-predict_parts(explainer = house_rf_explain,
+                        new_observation = new_obs2,
+                        type = "shap",
+                        B = 10
+)
+
+house_rf_shap3 <-predict_parts(explainer = house_rf_explain,
+                        new_observation = new_obs3,
+                        type = "shap",
+                        B = 10
+)
+
+plot(house_rf_shap1)
+plot(house_rf_shap2)
+plot(house_rf_shap3)
 ```
+
+
+  * The first SHAP plot shows a similar effect to the first break-down plot, where grade is the highest contributing variable, however this time it is in a negative way. The second and third SHAP plots both show that latitude is the highest contributing variable, which is in accordance with the break-down plots, this time both affecting the predicted price in the same way as the break-down plots. 
   
+
+#### Local Interpretable Model-Agnostic Explanation (LIME) Plots
+
+```{r}
+set.seed(494)
+
+model_type.dalex_explainer <- DALEXtra::model_type.dalex_explainer
+predict_model.dalex_explainer <- DALEXtra::predict_model.dalex_explainer
+
+house_lime_rf1 <- predict_surrogate(explainer = house_rf_explain,
+                                    new_observation = new_obs1 %>%
+                                    select(-log_price), 
+                                    n_features = 5,
+                                    n_permutations = 1000,
+                                    type = "lime")
+
+house_lime_rf2 <- predict_surrogate(explainer = house_rf_explain,
+                                    new_observation = new_obs2 %>%
+                                    select(-log_price), 
+                                    n_features = 5,
+                                    n_permutations = 1000,
+                                    type = "lime")
+
+house_lime_rf3 <- predict_surrogate(explainer = house_rf_explain,
+                                    new_observation = new_obs3 %>%
+                                    select(-log_price), 
+                                    n_features = 5,
+                                    n_permutations = 1000,
+                                    type = "lime")
+
+house_lime_rf1 %>% 
+  select(model_r2, model_prediction, prediction) %>% 
+  distinct()
+
+house_lime_rf2 %>% 
+  select(model_r2, model_prediction, prediction) %>% 
+  distinct()
+
+house_lime_rf3 %>% 
+  select(model_r2, model_prediction, prediction) %>% 
+  distinct()
+```
+
+```{r}
+plot(house_lime_rf1) +
+  labs(x = "Variable")
+
+plot(house_lime_rf2) +
+  labs(x = "Variable")
+
+plot(house_lime_rf3) +
+  labs(x = "Variable")
+```
+
+
+  * Plot 1 shows us that the predicted log price is about 5.577, and that grade is once again the most important in the local model. This model also performs quite poorly, as the explanation fit is only 0.11. This is the exact prediction (to three digits) that the original model had.
   
-  2. Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?
+  * Plot 2 shows us that the predicted log price is about 5.86, and that the living room area and latitude are the most important in the local model, albeit in opposite ways. This model performs better than the first, as the explanation fit is 0.45. This is the exact prediction (to two digits) as the original model.
+  
+  * Plot 3 shows us that the predicted log price is about 5.46, and that the grade is the most important to the local model. This model performs the worst out of the three, as the explanation fit is only 0.1. This is the exact prediction (to two digits) as the original model. 
+
+
+### Part 2
+  
+  Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?
+  
+  * These methods provide a helpful alternative to a simple variable importance plot, as we are able to identify variable importance on the level of individual observations. We are able to see why each observation contains the result that it does. The break-down plot method allows us to see how the entire training dataset is affected when we apply a certain model to it. The SHAP plots allow us to see how each variable contributes if we change the order of the variables (in this assignment, the contribution changes because the random forest model is not additive). Through this, we are able to see how true the effect is through the boxplots on top of the SHAP plot. Finally, the LIME plots allow us to see variable importance in conjunction with model performance, which gives us more insight into how trustworthy our result is.
   
 
 ## SQL 

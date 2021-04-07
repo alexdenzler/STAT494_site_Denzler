@@ -2138,15 +2138,8 @@ Assignments
 </code></pre>
 </div>
 </div>
-<p><strong>Tasks</strong></p>
-<ol type="1">
-<li>Choose 3 new observations and do the following for each observation:</li>
-</ol>
-<ul>
-<li>Construct a break-down plot using the default ordering. Interpret the resulting graph. Which variables contribute most to each observation’s prediction?</li>
-<li>Construct a SHAP graph and interpret it. Does it tell a similar story to the break-down plot?</li>
-<li>Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than Lisa used in the example.</li>
-</ul>
+<h3 id="part-1">Part 1</h3>
+<p>Choose 3 new observations and do the following for each observation: * Construct a break-down plot using the default ordering. Interpret the resulting graph. Which variables contribute most to each observation’s prediction? * Construct a SHAP graph and interpret it. Does it tell a similar story to the break-down plot? * Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than Lisa used in the example.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
@@ -2229,6 +2222,7 @@ Assignments
 </div>
 <pre><code>[1] 4e+05</code></pre>
 </div>
+<h4 id="break-down-plots">Break-Down Plots</h4>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_pp_rf1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
@@ -2263,28 +2257,137 @@ Assignments
 <li><p>The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or $137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or $727,779.80.</p></li>
 <li><p>The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or $67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or $288,403.20.</p></li>
 </ul>
+<h4 id="shapley-additive-explanationss-shap-plots">Shapley Additive Explanationss (SHAP) Plots</h4>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_rf_bdp1</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf1</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_rf_shap1</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                        new_observation <span class='op'>=</span> <span class='va'>new_obs1</span>,
+                        type <span class='op'>=</span> <span class='st'>"shap"</span>,
+                        B <span class='op'>=</span> <span class='fl'>10</span>
+<span class='op'>)</span>
 
-<span class='va'>house_rf_bdp2</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf2</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<span class='va'>house_rf_shap2</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                        new_observation <span class='op'>=</span> <span class='va'>new_obs2</span>,
+                        type <span class='op'>=</span> <span class='st'>"shap"</span>,
+                        B <span class='op'>=</span> <span class='fl'>10</span>
+<span class='op'>)</span>
 
-<span class='va'>house_rf_bdp3</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf3</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<span class='va'>house_rf_shap3</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                        new_observation <span class='op'>=</span> <span class='va'>new_obs3</span>,
+                        type <span class='op'>=</span> <span class='st'>"shap"</span>,
+                        B <span class='op'>=</span> <span class='fl'>10</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_rf_shap1</span><span class='op'>)</span>
 </code></pre>
 </div>
+<img src="Assignment3_files/figure-html5/unnamed-chunk-6-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_rf_shap2</span><span class='op'>)</span>
+</code></pre>
 </div>
-<ol start="2" type="1">
-<li>Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?</li>
-</ol>
+<img src="Assignment3_files/figure-html5/unnamed-chunk-6-2.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_rf_shap3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment3_files/figure-html5/unnamed-chunk-6-3.png" width="624" /></p>
+</div>
+<ul>
+<li>The first SHAP plot shows a similar effect to the first break-down plot, where grade is the highest contributing variable, however this time it is in a negative way. The second and third SHAP plots both show that latitude is the highest contributing variable, which is in accordance with the break-down plots, this time both affecting the predicted price in the same way as the break-down plots.</li>
+</ul>
+<h4 id="local-interpretable-model-agnostic-explanation-lime-plots">Local Interpretable Model-Agnostic Explanation (LIME) Plots</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>model_type.dalex_explainer</span> <span class='op'>&lt;-</span> <span class='fu'>DALEXtra</span><span class='fu'>::</span><span class='va'><a href='https://ModelOriented.github.io/DALEXtra/reference/predict_surrogate.html'>model_type.dalex_explainer</a></span>
+<span class='va'>predict_model.dalex_explainer</span> <span class='op'>&lt;-</span> <span class='fu'>DALEXtra</span><span class='fu'>::</span><span class='va'><a href='https://ModelOriented.github.io/DALEXtra/reference/predict_surrogate.html'>predict_model.dalex_explainer</a></span>
+
+<span class='va'>house_lime_rf1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/predict_surrogate.html'>predict_surrogate</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                                    new_observation <span class='op'>=</span> <span class='va'>new_obs1</span> <span class='op'>%&gt;%</span>
+                                    <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>log_price</span><span class='op'>)</span>, 
+                                    n_features <span class='op'>=</span> <span class='fl'>5</span>,
+                                    n_permutations <span class='op'>=</span> <span class='fl'>1000</span>,
+                                    type <span class='op'>=</span> <span class='st'>"lime"</span><span class='op'>)</span>
+
+<span class='va'>house_lime_rf2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/predict_surrogate.html'>predict_surrogate</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                                    new_observation <span class='op'>=</span> <span class='va'>new_obs2</span> <span class='op'>%&gt;%</span>
+                                    <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>log_price</span><span class='op'>)</span>, 
+                                    n_features <span class='op'>=</span> <span class='fl'>5</span>,
+                                    n_permutations <span class='op'>=</span> <span class='fl'>1000</span>,
+                                    type <span class='op'>=</span> <span class='st'>"lime"</span><span class='op'>)</span>
+
+<span class='va'>house_lime_rf3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/predict_surrogate.html'>predict_surrogate</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
+                                    new_observation <span class='op'>=</span> <span class='va'>new_obs3</span> <span class='op'>%&gt;%</span>
+                                    <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>log_price</span><span class='op'>)</span>, 
+                                    n_features <span class='op'>=</span> <span class='fl'>5</span>,
+                                    n_permutations <span class='op'>=</span> <span class='fl'>1000</span>,
+                                    type <span class='op'>=</span> <span class='st'>"lime"</span><span class='op'>)</span>
+
+<span class='va'>house_lime_rf1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>model_r2</span>, <span class='va'>model_prediction</span>, <span class='va'>prediction</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>distinct</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  model_r2 model_prediction prediction
+     &lt;dbl&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1    0.103             5.71       5.65</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_lime_rf2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>model_r2</span>, <span class='va'>model_prediction</span>, <span class='va'>prediction</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>distinct</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  model_r2 model_prediction prediction
+     &lt;dbl&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1   0.0394             5.63       5.60</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_lime_rf3</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>model_r2</span>, <span class='va'>model_prediction</span>, <span class='va'>prediction</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>distinct</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 3
+  model_r2 model_prediction prediction
+     &lt;dbl&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1    0.356             5.61       5.59</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_lime_rf1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Variable"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment3_files/figure-html5/unnamed-chunk-8-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_lime_rf2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Variable"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="Assignment3_files/figure-html5/unnamed-chunk-8-2.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_lime_rf3</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Variable"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment3_files/figure-html5/unnamed-chunk-8-3.png" width="624" /></p>
+</div>
+<ul>
+<li><p>Plot 1 shows us that the predicted log price is about 5.577, and that grade is once again the most important in the local model. This model also performs quite poorly, as the explanation fit is only 0.11. This is the exact prediction (to three digits) that the original model had.</p></li>
+<li><p>Plot 2 shows us that the predicted log price is about 5.86, and that the living room area and latitude are the most important in the local model, albeit in opposite ways. This model performs better than the first, as the explanation fit is 0.45. This is the exact prediction (to two digits) as the original model.</p></li>
+<li><p>Plot 3 shows us that the predicted log price is about 5.46, and that the grade is the most important to the local model. This model performs the worst out of the three, as the explanation fit is only 0.1. This is the exact prediction (to two digits) as the original model.</p></li>
+</ul>
+<h3 id="part-2">Part 2</h3>
+<p>Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?</p>
+<ul>
+<li>These methods provide a helpful alternative to a simple variable importance plot, as we are able to identify variable importance on the level of individual observations. We are able to see why each observation contains the result that it does. The break-down plot method allows us to see how the entire training dataset is affected when we apply a certain model to it. The SHAP plots allow us to see how each variable contributes if we change the order of the variables (in this assignment, the contribution changes because the random forest model is not additive). Through this, we are able to see how true the effect is through the boxplots on top of the SHAP plot. Finally, the LIME plots allow us to see variable importance in conjunction with model performance, which gives us more insight into how trustworthy our result is.</li>
+</ul>
 <h2 id="sql">SQL</h2>
 <p>You will use the <code>airlines</code> data from the SQL database that Lisa used in the example in the tutorial. Be sure to include the chunk to connect to the database here. And, when you are finished, disconnect. You may need to reconnect throughout as it times out after a while.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
