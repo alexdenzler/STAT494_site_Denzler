@@ -48,12 +48,124 @@ library(stopwords)
 
 ## Local Interpretable Machine Learning
 
+We will use the King County housing data.
+
+```{r}
+data("house_prices")
+
+# Create log_price and drop price variable
+house_prices <- house_prices %>% 
+  mutate(log_price = log(price, base = 10)) %>% 
+  # make all integers numeric ... fixes prediction problem
+  mutate(across(where(is.integer), as.numeric)) %>% 
+  select(-price)
+```
+
+
 **Tasks**
 
   1. Choose 3 new observations and do the following for each observation:
   * Construct a break-down plot using the default ordering. Interpret the resulting graph. Which variables contribute most to each observation’s prediction?
   * Construct a SHAP graph and interpret it. Does it tell a similar story to the break-down plot?
-  * Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than I used in the example.
+  * Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than Lisa used in the example.
+  
+  
+```{r}
+set.seed(494)
+
+house_split <- initial_split(house_prices, 
+                             prop = .75)
+house_train <- training(house_split)
+house_test <- testing(house_split)
+
+house_ranger_recipe <- 
+  recipe(formula = log_price ~ ., 
+         data = house_train) %>% 
+  step_date(date, 
+            features = "month") %>% 
+  update_role(all_of(c("id",
+                       "date")),
+              new_role = "evaluative")
+
+house_ranger_spec <- 
+  rand_forest(mtry = 6, 
+              min_n = 10, 
+              trees = 200) %>% 
+  set_mode("regression") %>% 
+  set_engine("ranger")
+
+house_ranger_workflow <- 
+  workflow() %>% 
+  add_recipe(house_ranger_recipe) %>% 
+  add_model(house_ranger_spec) 
+
+set.seed(494)
+house_ranger_fit <- house_ranger_workflow %>% 
+  fit(house_train)
+```
+  
+  
+```{r}
+house_rf_explain <- 
+  explain_tidymodels(
+    model = house_ranger_fit,
+    data = house_train %>% select(-log_price), 
+    y = house_train %>%  pull(log_price),
+    label = "Random Forest"
+  )
+```
+  
+```{r}
+set.seed(494)
+new_obs1 <- house_test %>% slice(4239)
+new_obs2 <- house_test %>% slice(294)
+new_obs3 <- house_test %>% slice(3)
+
+10^(new_obs1$log_price)
+10^(new_obs2$log_price)
+10^(new_obs3$log_price)
+```
+  
+```{r}
+house_pp_rf1 <- predict_parts(explainer = house_rf_explain,
+                       new_observation = new_obs1,
+                       type = "break_down")
+
+house_pp_rf2 <- predict_parts(explainer = house_rf_explain,
+                       new_observation = new_obs2,
+                       type = "break_down")
+
+house_pp_rf3 <- predict_parts(explainer = house_rf_explain,
+                       new_observation = new_obs3,
+                       type = "break_down")
+
+plot(house_pp_rf1)
+plot(house_pp_rf2)
+plot(house_pp_rf3)
+```
+
+* The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or \$462,381. We  see that holding constant at 6 affects the overall average price the most, and decreases the log price by 0.03, or \$30,861.90. The predicted log price for this observation is 5.577, or \$377,572.20.
+
+* The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or \$137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or \$727,779.80.
+
+* The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or \$67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or \$288,403.20.
+
+
+  
+```{r}
+house_rf_bdp1 <- house_pp_rf1 %>% 
+  as_tibble() %>% 
+  select(variable, contribution)
+
+house_rf_bdp2 <- house_pp_rf2 %>% 
+  as_tibble() %>% 
+  select(variable, contribution)
+
+house_rf_bdp3 <- house_pp_rf3 %>% 
+  as_tibble() %>% 
+  select(variable, contribution)
+```
+  
   
   2. Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?
   

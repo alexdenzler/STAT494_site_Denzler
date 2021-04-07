@@ -86,26 +86,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>STAT 494: Alex Denzler: Assignment #3</title>
+  <title>STAT 494: Alex Denzler: Assignment #1</title>
   
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="STAT 494: Alex Denzler: Assignment #3"/>
+  <meta property="og:title" content="STAT 494: Alex Denzler: Assignment #1"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="STAT 494: Alex Denzler"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="STAT 494: Alex Denzler: Assignment #3"/>
+  <meta property="twitter:title" content="STAT 494: Alex Denzler: Assignment #1"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","output"]}},"value":[{"type":"character","attributes":{},"value":["Assignment #3"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["html_document"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","df_print","code_download"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["paged"]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","output"]}},"value":[{"type":"character","attributes":{},"value":["Assignment #1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["html_document"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","df_print","code_download"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["paged"]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2049,7 +2049,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Assignment #3","authors":[]}
+{"title":"Assignment #1","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2070,7 +2070,6 @@ Assignments
 <div class="nav-dropdown-content">
 <a href="Assignment1.html">Assignment 1</a>
 <a href="Assignment2.html">Assignment 2</a>
-<a href="Assignment3.html">Assignment 3</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -2082,7 +2081,7 @@ Assignments
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Assignment #3</h1>
+<h1>Assignment #1</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2092,199 +2091,481 @@ Assignments
 <div class="d-article">
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># SEE modeldata package for new datasets</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>         <span class='co'># for graphing and data cleaning</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>         <span class='co'># for graphing and data cleaning</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidymodels.tidymodels.org'>tidymodels</a></span><span class='op'>)</span>        <span class='co'># for modeling</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>stacks</span><span class='op'>)</span>            <span class='co'># for stacking models</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/njtierney/naniar'>naniar</a></span><span class='op'>)</span>            <span class='co'># for examining missing values (NAs)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>         <span class='co'># for date manipulation</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/moderndive/moderndive/issues'>moderndive</a></span><span class='op'>)</span>        <span class='co'># for King County housing data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dalex.drwhy.ai'>DALEX</a></span><span class='op'>)</span>             <span class='co'># for model interpretation  </span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ModelOriented.github.io/DALEXtra/'>DALEXtra</a></span><span class='op'>)</span>          <span class='co'># for extension of DALEX</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://patchwork.data-imaginist.com'>patchwork</a></span><span class='op'>)</span>         <span class='co'># for combining plots nicely</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dbplyr.tidyverse.org/'>dbplyr</a></span><span class='op'>)</span>            <span class='co'># for SQL query "cheating" - part of tidyverse but needs to be loaded separately</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mdsr-book/mdsr'>mdsr</a></span><span class='op'>)</span>              <span class='co'># for accessing some databases - goes with Modern Data Science with R textbook</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://downloads.mariadb.org/connector-c/'>RMySQL</a></span><span class='op'>)</span>            <span class='co'># for accessing MySQL databases</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rsqlite.r-dbi.org'>RSQLite</a></span><span class='op'>)</span>           <span class='co'># for accessing SQLite databases</span>
-
-<span class='co'>#mapping</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>maps</span><span class='op'>)</span>              <span class='co'># for built-in maps</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>                <span class='co'># for making maps using geom_sf</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jrnold/ggthemes'>ggthemes</a></span><span class='op'>)</span>          <span class='co'># Lisa added - I like theme_map() for maps :)</span>
-
-<span class='co'>#tidytext</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>          <span class='co'># for text analysis, the tidy way!</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/EmilHvitfeldt/textdata'>textdata</a></span><span class='op'>)</span>          
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://blog.fellstat.com/?cat=11'>wordcloud</a></span><span class='op'>)</span>         <span class='co'># for wordcloud</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/quanteda/stopwords'>stopwords</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/njtierney/naniar'>naniar</a></span><span class='op'>)</span>            <span class='co'># for analyzing missing values</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/koalaverse/vip/'>vip</a></span><span class='op'>)</span>               <span class='co'># for variable importance plots</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://glmnet.stanford.edu'>glmnet</a></span><span class='op'>)</span>            <span class='co'># for regularized regression, including LASSO</span>
 </code></pre>
 </div>
 </div>
-<h2 id="put-it-on-github">Put it on GitHub!</h2>
-<p><a href="https://github.com/alexdenzler/STAT494_site_Denzler">Here</a> is my GitHub link.</p>
-<h2 id="local-interpretable-machine-learning">Local Interpretable Machine Learning</h2>
-<p>We will use the King County housing data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"house_prices"</span><span class='op'>)</span>
-
-<span class='co'># Create log_price and drop price variable</span>
-<span class='va'>house_prices</span> <span class='op'>&lt;-</span> <span class='va'>house_prices</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>log_price <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>price</span>, base <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='co'># make all integers numeric ... fixes prediction problem</span>
-  <span class='fu'>mutate</span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/naniar/man/where.html'>where</a></span><span class='op'>(</span><span class='va'>is.integer</span><span class='op'>)</span>, <span class='va'>as.numeric</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>price</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>&lt;-</span> <span class='fu'>readr</span><span class='fu'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv'</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<p><strong>Tasks</strong></p>
-<ol type="1">
-<li>Choose 3 new observations and do the following for each observation:</li>
+<h2 id="setting-up-git-and-github-in-rstudio">Setting Up Git and Github in RStudio</h2>
+<p><a href="https://github.com/alexdenzler/STAT494_site_Denzler">Here</a> is my Github link.</p>
+<h2 id="creating-a-website">Creating a Website</h2>
+<ul>
+<li>Website Link
+<ul>
+<li><a href="https://upbeat-hawking-b9ef26.netlify.app">Here</a> is the link to my website.</li>
+</ul></li>
+<li>Building a Career in Data Science, Chapter 4: Building a Portfolio reflection
+<ul>
+<li>One thing that stood out most to me was the comment about making a portfolio with results that regular people can digest. I believe that this is important for multiple reasons. First, making sure that your portfolio is understandable will help recruiters who are not necessarily versed in data science techniques understand your work and your abilities. Second, it is most likely that when working in the professional world, you will need to explain your results to people who are not on the data science team, so it is good to practice this ability.</li>
+</ul></li>
+</ul>
+<h2 id="machine-learning-review-and-intro-to-tidymodels">Machine Learning review and intro to <code>tidymodels</code></h2>
+<ol class="example" type="1">
+<li>Read about the hotel booking data, <code>hotels</code>, on the Tidy Tuesday page it came from. There is also a link to an article from the original authors. The outcome we will be predicting is called <code>is_canceled</code>.</li>
 </ol>
 <ul>
-<li>Construct a break-down plot using the default ordering. Interpret the resulting graph. Which variables contribute most to each observation’s prediction?</li>
-<li>Construct a SHAP graph and interpret it. Does it tell a similar story to the break-down plot?</li>
-<li>Construct a LIME graph (follow my code carefully). How close is each original prediction to the prediction from the local model? Interpret the result. You can also try using fewer or more variables in the local model than Lisa used in the example.</li>
+<li>Without doing any analysis, what are some variables you think might be predictive and why?
+<ul>
+<li>There are a few variables that could be predictive, however <code>previous_cancellations</code> definitely stands out. It is reasonable to assume that if someone has canceled before, they could possiblky cancel again. <code>booking_changes</code> could also be predictive, as someone who makes a bunch of changes is likely to be unsure about their booking and one of the changes that they could make could be canceling the stay. Finally, a third variable that could be predictive is <code>customer_type</code>, as the type of customer could make it easier or more difficult to cancel the stay.</li>
+</ul></li>
+<li>What are some problems that might exist with the data? You might think about how it was collected and who did the collecting.
+<ul>
+<li>One issue with the way that the data was collected is that there are almost twice as many observations for the city hotel as the resort hotel, which could introduce bias into the data. The data for canceled bookings could also be less accurate, as variables such as adults, children, and babies could be inaccurate due to the family or group never showing up. Therefore, there could be bias towards non-canceled bookings based on how the data was collected. The <code>reservation_status</code> variable is also a bit redundant, as it states whether someone canceled their reservation or not, which is already given in the <code>is_canceled</code> variable. Finally, each reservation is missing a unique identifier, so</li>
+</ul></li>
+<li>If we construct a model, what type of conclusions will be able to draw from it?
+<ul>
+<li>If we construct a model, the type of conclusions that we’ll be able to draw from it are likely to be which variables are most important to determine the likelihood of cancellation. This could easily be achieved using the LASSO technique to analyze variable importance.</li>
+</ul></li>
 </ul>
+<ol start="2" class="example" type="1">
+<li>Create some exploratory plots or table summaries of the data, concentrating most on relationships with the response variable. Keep in mind the response variable is numeric, 0 or 1. You may want to make it categorical (you also may not). Be sure to also examine missing values or other interesting values.</li>
+</ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
-
-<span class='va'>house_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>house_prices</span>, 
-                             prop <span class='op'>=</span> <span class='fl'>.75</span><span class='op'>)</span>
-<span class='va'>house_train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>house_split</span><span class='op'>)</span>
-<span class='va'>house_test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dbplyr.tidyverse.org/reference/testing.html'>testing</a></span><span class='op'>(</span><span class='va'>house_split</span><span class='op'>)</span>
-
-<span class='va'>house_ranger_recipe</span> <span class='op'>&lt;-</span> 
-  <span class='fu'>recipe</span><span class='op'>(</span>formula <span class='op'>=</span> <span class='va'>log_price</span> <span class='op'>~</span> <span class='va'>.</span>, 
-         data <span class='op'>=</span> <span class='va'>house_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_date</span><span class='op'>(</span><span class='va'>date</span>, 
-            features <span class='op'>=</span> <span class='st'>"month"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>update_role</span><span class='op'>(</span><span class='fu'>all_of</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>,
-                       <span class='st'>"date"</span><span class='op'>)</span><span class='op'>)</span>,
-              new_role <span class='op'>=</span> <span class='st'>"evaluative"</span><span class='op'>)</span>
-
-<span class='va'>house_ranger_spec</span> <span class='op'>&lt;-</span> 
-  <span class='fu'>rand_forest</span><span class='op'>(</span>mtry <span class='op'>=</span> <span class='fl'>6</span>, 
-              min_n <span class='op'>=</span> <span class='fl'>10</span>, 
-              trees <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"regression"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"ranger"</span><span class='op'>)</span>
-
-<span class='va'>house_ranger_workflow</span> <span class='op'>&lt;-</span> 
-  <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>house_ranger_recipe</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>house_ranger_spec</span><span class='op'>)</span> 
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>hotel</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>customer_type</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>previous_cancellations</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"orange"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>3</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>ylim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>7000</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>adults</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>children</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>ylim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>2500</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>babies</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_bar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>xlim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.window.html'>ylim</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>200</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<ol start="3" class="example" type="1">
+<li>First, we will do a couple things to get the data ready, including making the outcome a factor (needs to be that way for logistic regression), removing the year variable and some reservation status variables, and removing missing values (not NULLs but true missing values). Split the data into a training and test set, stratifying on the outcome variable, <code>is_canceled</code>. Since we have a lot of data, we’re going to split the data 50/50 between training and test. I have already <code>set.seed()</code> for you. Be sure to use <code>hotels_mod</code> in the splitting.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotels_mod</span> <span class='op'>&lt;-</span> <span class='va'>hotels</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>is_canceled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/naniar/man/where.html'>where</a></span><span class='op'>(</span><span class='va'>is.character</span><span class='op'>)</span>, <span class='va'>as.factor</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>arrival_date_year</span>,
+         <span class='op'>-</span><span class='va'>reservation_status</span>,
+         <span class='op'>-</span><span class='va'>reservation_status_date</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/naniar/man/add_n_miss.html'>add_n_miss</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>n_miss_all</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>n_miss_all</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
-<span class='va'>house_ranger_fit</span> <span class='op'>&lt;-</span> <span class='va'>house_ranger_workflow</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>fit</span><span class='op'>(</span><span class='va'>house_train</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_rf_explain</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://ModelOriented.github.io/DALEXtra/reference/explain_tidymodels.html'>explain_tidymodels</a></span><span class='op'>(</span>
-    model <span class='op'>=</span> <span class='va'>house_ranger_fit</span>,
-    data <span class='op'>=</span> <span class='va'>house_train</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>log_price</span><span class='op'>)</span>, 
-    y <span class='op'>=</span> <span class='va'>house_train</span> <span class='op'>%&gt;%</span>  <span class='fu'>pull</span><span class='op'>(</span><span class='va'>log_price</span><span class='op'>)</span>,
-    label <span class='op'>=</span> <span class='st'>"Random Forest"</span>
-  <span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_split</span> <span class='op'>&lt;-</span> <span class='fu'>initial_split</span><span class='op'>(</span><span class='va'>hotels_mod</span>,
+                             prop <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='va'>hotel_train</span> <span class='op'>&lt;-</span> <span class='fu'>training</span><span class='op'>(</span><span class='va'>hotel_split</span><span class='op'>)</span>
+<span class='va'>hotel_test</span> <span class='op'>&lt;-</span> <span class='fu'>testing</span><span class='op'>(</span><span class='va'>hotel_split</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>Preparation of a new explainer is initiated
-  -&gt; model label       :  Random Forest 
-  -&gt; data              :  16210  rows  20  cols 
-  -&gt; data              :  tibble converted into a data.frame 
-  -&gt; target variable   :  16210  values 
-  -&gt; predict function  :  yhat.workflow  will be used ( [33m default [39m )
-  -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )
-  -&gt; model_info        :  package tidymodels , ver. 0.1.2 , task regression ( [33m default [39m ) 
-  -&gt; predicted values  :  numerical, min =  5.020731 , mean =  5.665231 , max =  6.696937  
-  -&gt; residual function :  difference between y and yhat ( [33m default [39m )
-  -&gt; residuals         :  numerical, min =  -0.3328418 , mean =  0.0004361088 , max =  0.2467335  
- [32m A new explainer has been created! [39m </code></pre>
 </div>
+<ol start="4" class="example" type="1">
+<li>Pre-processing</li>
+</ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
-<span class='va'>new_obs1</span> <span class='op'>&lt;-</span> <span class='va'>house_test</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>4239</span><span class='op'>)</span>
-<span class='va'>new_obs2</span> <span class='op'>&lt;-</span> <span class='va'>house_test</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>294</span><span class='op'>)</span>
-<span class='va'>new_obs3</span> <span class='op'>&lt;-</span> <span class='va'>house_test</span> <span class='op'>%&gt;%</span> <span class='fu'>slice</span><span class='op'>(</span><span class='fl'>3</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_recipe</span> <span class='op'>&lt;-</span> <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>is_canceled</span> <span class='op'>~</span><span class='va'>.</span>,
+                       data <span class='op'>=</span> <span class='va'>hotel_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='va'>children</span>, <span class='va'>babies</span>, <span class='va'>previous_cancellations</span>,
+                 fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>.</span> <span class='op'>&gt;</span> <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>step_mutate_at</span><span class='op'>(</span><span class='va'>agent</span>, <span class='va'>company</span>,
+                  fn <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>.</span> <span class='op'>==</span> <span class='st'>"NULL"</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'>step_mutate</span><span class='op'>(</span>country <span class='op'>=</span> <span class='fu'>fct_lump_n</span><span class='op'>(</span><span class='va'>country</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'>step_normalize</span><span class='op'>(</span><span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+          <span class='fu'>step_dummy</span><span class='op'>(</span><span class='fu'>all_nominal</span><span class='op'>(</span><span class='op'>)</span>, <span class='op'>-</span><span class='fu'>all_outcomes</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fl'>10</span><span class='op'>^</span><span class='op'>(</span><span class='va'>new_obs1</span><span class='op'>$</span><span class='va'>log_price</span><span class='op'>)</span>
+<span class='va'>hotel_recipe</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>prep</span><span class='op'>(</span><span class='va'>hotel_train</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>juice</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1] 470000</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fl'>10</span><span class='op'>^</span><span class='op'>(</span><span class='va'>new_obs2</span><span class='op'>$</span><span class='va'>log_price</span><span class='op'>)</span>
-</code></pre>
+<pre><code># A tibble: 59,693 x 76
+   lead_time arrival_date_week_… arrival_date_day_… stays_in_weekend_…
+       &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+ 1    -0.907             -0.0141              -1.69            -0.933 
+ 2    -0.841             -0.0141              -1.69            -0.933 
+ 3    -0.176             -0.0141              -1.69            -0.933 
+ 4    -0.804             -0.0141              -1.69            -0.933 
+ 5    -0.335             -0.0141              -1.69            -0.933 
+ 6    -0.907             -0.0141              -1.69            -0.933 
+ 7    -0.626             -0.0141              -1.69             0.0761
+ 8    -0.298             -0.0141              -1.69             1.09  
+ 9    -0.298             -0.0141              -1.69             1.09  
+10     0.217             -0.0141              -1.69             1.09  
+# … with 59,683 more rows, and 72 more variables:
+#   stays_in_week_nights &lt;dbl&gt;, adults &lt;dbl&gt;, children &lt;dbl&gt;,
+#   babies &lt;dbl&gt;, is_repeated_guest &lt;dbl&gt;,
+#   previous_cancellations &lt;dbl&gt;,
+#   previous_bookings_not_canceled &lt;dbl&gt;, booking_changes &lt;dbl&gt;,
+#   agent &lt;dbl&gt;, company &lt;dbl&gt;, days_in_waiting_list &lt;dbl&gt;,
+#   adr &lt;dbl&gt;, required_car_parking_spaces &lt;dbl&gt;,
+#   total_of_special_requests &lt;dbl&gt;, is_canceled &lt;fct&gt;,
+#   hotel_Resort.Hotel &lt;dbl&gt;, arrival_date_month_August &lt;dbl&gt;,
+#   arrival_date_month_December &lt;dbl&gt;,
+#   arrival_date_month_February &lt;dbl&gt;,
+#   arrival_date_month_January &lt;dbl&gt;, arrival_date_month_July &lt;dbl&gt;,
+#   arrival_date_month_June &lt;dbl&gt;, arrival_date_month_March &lt;dbl&gt;,
+#   arrival_date_month_May &lt;dbl&gt;, arrival_date_month_November &lt;dbl&gt;,
+#   arrival_date_month_October &lt;dbl&gt;,
+#   arrival_date_month_September &lt;dbl&gt;, meal_FB &lt;dbl&gt;, meal_HB &lt;dbl&gt;,
+#   meal_SC &lt;dbl&gt;, meal_Undefined &lt;dbl&gt;, country_ESP &lt;dbl&gt;,
+#   country_FRA &lt;dbl&gt;, country_GBR &lt;dbl&gt;, country_PRT &lt;dbl&gt;,
+#   country_Other &lt;dbl&gt;, market_segment_Complementary &lt;dbl&gt;,
+#   market_segment_Corporate &lt;dbl&gt;, market_segment_Direct &lt;dbl&gt;,
+#   market_segment_Groups &lt;dbl&gt;, market_segment_Offline.TA.TO &lt;dbl&gt;,
+#   market_segment_Online.TA &lt;dbl&gt;, market_segment_Undefined &lt;dbl&gt;,
+#   distribution_channel_Direct &lt;dbl&gt;,
+#   distribution_channel_GDS &lt;dbl&gt;, distribution_channel_TA.TO &lt;dbl&gt;,
+#   distribution_channel_Undefined &lt;dbl&gt;, reserved_room_type_B &lt;dbl&gt;,
+#   reserved_room_type_C &lt;dbl&gt;, reserved_room_type_D &lt;dbl&gt;,
+#   reserved_room_type_E &lt;dbl&gt;, reserved_room_type_F &lt;dbl&gt;,
+#   reserved_room_type_G &lt;dbl&gt;, reserved_room_type_H &lt;dbl&gt;,
+#   reserved_room_type_L &lt;dbl&gt;, reserved_room_type_P &lt;dbl&gt;,
+#   assigned_room_type_B &lt;dbl&gt;, assigned_room_type_C &lt;dbl&gt;,
+#   assigned_room_type_D &lt;dbl&gt;, assigned_room_type_E &lt;dbl&gt;,
+#   assigned_room_type_F &lt;dbl&gt;, assigned_room_type_G &lt;dbl&gt;,
+#   assigned_room_type_H &lt;dbl&gt;, assigned_room_type_I &lt;dbl&gt;,
+#   assigned_room_type_K &lt;dbl&gt;, assigned_room_type_L &lt;dbl&gt;,
+#   assigned_room_type_P &lt;dbl&gt;, deposit_type_Non.Refund &lt;dbl&gt;,
+#   deposit_type_Refundable &lt;dbl&gt;, customer_type_Group &lt;dbl&gt;,
+#   customer_type_Transient &lt;dbl&gt;,
+#   customer_type_Transient.Party &lt;dbl&gt;</code></pre>
 </div>
-<pre><code>[1] 425000</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fl'>10</span><span class='op'>^</span><span class='op'>(</span><span class='va'>new_obs3</span><span class='op'>$</span><span class='va'>log_price</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>[1] 4e+05</code></pre>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_pp_rf1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
-                       new_observation <span class='op'>=</span> <span class='va'>new_obs1</span>,
-                       type <span class='op'>=</span> <span class='st'>"break_down"</span><span class='op'>)</span>
-
-<span class='va'>house_pp_rf2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
-                       new_observation <span class='op'>=</span> <span class='va'>new_obs2</span>,
-                       type <span class='op'>=</span> <span class='st'>"break_down"</span><span class='op'>)</span>
-
-<span class='va'>house_pp_rf3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dalex.drwhy.ai/reference/predict_parts.html'>predict_parts</a></span><span class='op'>(</span>explainer <span class='op'>=</span> <span class='va'>house_rf_explain</span>,
-                       new_observation <span class='op'>=</span> <span class='va'>new_obs3</span>,
-                       type <span class='op'>=</span> <span class='st'>"break_down"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_pp_rf1</span><span class='op'>)</span>
-</code></pre>
-</div>
-<img src="Assignment3_files/figure-html5/unnamed-chunk-5-1.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_pp_rf2</span><span class='op'>)</span>
-</code></pre>
-</div>
-<img src="Assignment3_files/figure-html5/unnamed-chunk-5-2.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>house_pp_rf3</span><span class='op'>)</span>
-</code></pre>
-</div>
-<p><img src="Assignment3_files/figure-html5/unnamed-chunk-5-3.png" width="624" /></p>
-</div>
+<ol start="5" class="example" type="1">
+<li>LASSO model and workflow</li>
+</ol>
 <ul>
-<li><p>The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or $462,381. We see that holding constant at 6 affects the overall average price the most, and decreases the log price by 0.03, or $30,861.90. The predicted log price for this observation is 5.577, or $377,572.20.</p></li>
-<li><p>The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or $137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or $727,779.80.</p></li>
-<li><p>The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or $67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or $288,403.20.</p></li>
+<li>We would want to use a LASSO workflow because LASSO uses an importance coefficient which reduces to zero when the variable is deemed to be not predictive of our outcome variable. This will allow us to reduce the size of our dataset and only focus on our indicator variables that matter.</li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>house_rf_bdp1</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf1</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lasso_hotel_mod</span> <span class='op'>&lt;-</span> <span class='fu'>logistic_reg</span><span class='op'>(</span>penalty <span class='op'>=</span> <span class='fu'>tune</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>set_engine</span><span class='op'>(</span><span class='st'>"glmnet"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>set_mode</span><span class='op'>(</span><span class='st'>"classification"</span><span class='op'>)</span>
 
-<span class='va'>house_rf_bdp2</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf2</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<span class='va'>hotel_workflow</span> <span class='op'>&lt;-</span> <span class='fu'>workflow</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_recipe</span><span class='op'>(</span><span class='va'>hotel_recipe</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>add_model</span><span class='op'>(</span><span class='va'>lasso_hotel_mod</span><span class='op'>)</span>
 
-<span class='va'>house_rf_bdp3</span> <span class='op'>&lt;-</span> <span class='va'>house_pp_rf3</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>contribution</span><span class='op'>)</span>
+<span class='va'>lasso_hotel_fit</span> <span class='op'>&lt;-</span> <span class='va'>hotel_workflow</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>fit</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>hotel_train</span><span class='op'>)</span>
+
+<span class='va'>lasso_hotel_fit</span>
+</code></pre>
+</div>
+<pre><code>══ Workflow [trained] ════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: logistic_reg()
+
+── Preprocessor ──────────────────────────────────────────────────────
+5 Recipe Steps
+
+● step_mutate_at()
+● step_mutate_at()
+● step_mutate()
+● step_normalize()
+● step_dummy()
+
+── Model ─────────────────────────────────────────────────────────────
+
+Call:  glmnet::glmnet(x = maybe_matrix(x), y = y, family = &quot;binomial&quot;) 
+
+   Df  %Dev   Lambda
+1   0  0.00 0.232200
+2   1  2.92 0.211600
+3   1  5.27 0.192800
+4   1  7.21 0.175700
+5   1  8.83 0.160100
+6   1 10.20 0.145900
+7   1 11.37 0.132900
+8   1 12.38 0.121100
+9   2 13.31 0.110300
+10  2 14.35 0.100500
+11  2 15.26 0.091600
+12  3 16.15 0.083460
+13  5 17.27 0.076050
+14  5 18.47 0.069290
+15  7 19.65 0.063140
+16  8 21.74 0.057530
+17  8 23.58 0.052420
+18  8 25.21 0.047760
+19  9 26.70 0.043520
+20 10 28.09 0.039650
+21 11 29.35 0.036130
+22 11 30.48 0.032920
+23 12 31.47 0.029990
+24 13 32.41 0.027330
+25 15 33.25 0.024900
+26 15 34.02 0.022690
+27 15 34.70 0.020670
+28 15 35.31 0.018840
+29 17 35.86 0.017160
+30 20 36.40 0.015640
+31 22 36.88 0.014250
+32 22 37.33 0.012980
+33 24 37.72 0.011830
+34 24 38.07 0.010780
+35 25 38.37 0.009822
+36 28 38.67 0.008949
+37 32 38.97 0.008154
+38 33 39.28 0.007430
+39 34 39.56 0.006770
+40 36 39.82 0.006168
+41 41 40.07 0.005620
+42 42 40.31 0.005121
+43 43 40.52 0.004666
+44 45 40.71 0.004252
+45 46 40.91 0.003874
+46 46 41.08 0.003530
+
+...
+and 40 more lines.</code></pre>
+</div>
+<ol start="6" class="example" type="1">
+<li>Tune and fit the model</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span>
+
+<span class='va'>hotel_cv</span> <span class='op'>&lt;-</span> <span class='fu'>vfold_cv</span><span class='op'>(</span><span class='va'>hotel_train</span>, v <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_pen_grid</span> <span class='op'>&lt;-</span> <span class='fu'>grid_regular</span><span class='op'>(</span><span class='fu'>penalty</span><span class='op'>(</span><span class='op'>)</span>, levels <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_tune</span> <span class='op'>&lt;-</span> <span class='va'>hotel_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>tune_grid</span><span class='op'>(</span>resamples <span class='op'>=</span> <span class='va'>hotel_cv</span>,
+            grid <span class='op'>=</span> <span class='va'>hotel_lasso_pen_grid</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<ol start="2" type="1">
-<li>Describe how you would use the interpretable machine learning tools we’ve learned (both local and global) in future machine learning projects? How does each of them help you?</li>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.metric</span> <span class='op'>==</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 7
+       penalty .metric  .estimator  mean     n std_err .config        
+         &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
+ 1    1.00e-10 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 2    1.29e- 9 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 3    1.67e- 8 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 4    2.15e- 7 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 5    2.78e- 6 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 6    3.59e- 5 accuracy binary     0.813     5 0.00127 Preprocessor1_…
+ 7    4.64e- 4 accuracy binary     0.812     5 0.00136 Preprocessor1_…
+ 8    5.99e- 3 accuracy binary     0.801     5 0.00185 Preprocessor1_…
+ 9    7.74e- 2 accuracy binary     0.750     5 0.00236 Preprocessor1_…
+10    1.00e+ 0 accuracy binary     0.630     5 0.00112 Preprocessor1_…</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.metric</span> <span class='op'>==</span> <span class='st'>"accuracy"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>penalty</span>, y <span class='op'>=</span> <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>geom_line</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>scale_x_log10</span><span class='op'>(</span>
+        breaks <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/trans_breaks.html'>trans_breaks</a></span><span class='op'>(</span><span class='st'>"log10"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fl'>10</span><span class='op'>^</span><span class='va'>x</span><span class='op'>)</span>,
+        labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/trans_format.html'>trans_format</a></span><span class='op'>(</span><span class='st'>"log10"</span>,<span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/label_parse.html'>math_format</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>^</span><span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Penalty"</span>,
+             y <span class='op'>=</span> <span class='st'>"Accuracy"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>best_param</span> <span class='op'>&lt;-</span> <span class='va'>hotel_lasso_tune</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_best</span><span class='op'>(</span>metric <span class='op'>=</span> <span class='st'>"accuracy"</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_final_workflow</span> <span class='op'>&lt;-</span> <span class='va'>hotel_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>finalize_workflow</span><span class='op'>(</span><span class='va'>best_param</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_final_mod</span> <span class='op'>&lt;-</span> <span class='va'>hotel_lasso_final_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>fit</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>hotel_train</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_final_mod</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pull_workflow_fit</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>tidy</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 76 x 3
+   term                      estimate      penalty
+   &lt;chr&gt;                        &lt;dbl&gt;        &lt;dbl&gt;
+ 1 (Intercept)                -2.86   0.0000000001
+ 2 lead_time                   0.600  0.0000000001
+ 3 arrival_date_week_number   -0.196  0.0000000001
+ 4 arrival_date_day_of_month   0.0219 0.0000000001
+ 5 stays_in_weekend_nights     0.0952 0.0000000001
+ 6 stays_in_week_nights        0.137  0.0000000001
+ 7 adults                      0.0964 0.0000000001
+ 8 children                    0.0707 0.0000000001
+ 9 babies                      0.0299 0.0000000001
+10 is_repeated_guest          -0.316  0.0000000001
+# … with 66 more rows</code></pre>
+</div>
+<ul>
+<li>Some of the coefficients are zero, signifying that those predictor variables are not a factor in our LASSO model.</li>
+</ul>
+<ol start="7" class="example" type="1">
+<li>Variable Importance Graph</li>
 </ol>
-<h2 id="sql">SQL</h2>
-<p>You will use the <code>airlines</code> data from the SQL database that Lisa used in the example in the tutorial. Be sure to include the chunk to connect to the database here. And, when you are finished, disconnect. You may need to reconnect throughout as it times out after a while.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_lasso_final_mod</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pull_workflow_fit</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/vip/man/vip.html'>vip</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+</div>
+<ul>
+<li>It is unsurprising that the type of room reserved is the most important variable. It can explain a possible hypothesis that the majority of cancellations come when someone in a group drops out of a reservation. The importance of the non-refundable deposit type is also unsurprising because putting down a non-refundable deposit will most likely influence someone to not cancel their reservation.</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>hotel_lasso_test</span> <span class='op'>&lt;-</span> <span class='va'>hotel_lasso_final_workflow</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>last_fit</span><span class='op'>(</span><span class='va'>hotel_split</span><span class='op'>)</span>
+
+<span class='va'>hotel_lasso_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>collect_metrics</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 4
+  .metric  .estimator .estimate .config             
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary         0.814 Preprocessor1_Model1
+2 roc_auc  binary         0.895 Preprocessor1_Model1</code></pre>
+</div>
+<ul>
+<li>The accuracy estimate for the test data is slightly higher than for the cross-validated data.</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>preds</span> <span class='op'>&lt;-</span> <span class='fu'>collect_predictions</span><span class='op'>(</span><span class='va'>hotel_lasso_test</span><span class='op'>)</span>
+
+<span class='va'>preds</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>conf_mat</span><span class='op'>(</span><span class='va'>.pred_class</span>, <span class='va'>is_canceled</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>          Truth
+Prediction     0     1
+         0 34225  3340
+         1  7782 14346</code></pre>
+</div>
+<ul>
+<li>Sensitivity: <span class="math inline">\(\frac{34492}{34492+8004} = 0.81165\)</span></li>
+<li>Specificity: <span class="math inline">\(\frac{14032}{14032 + 3165} = 0.815956\)</span></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>preds</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>.pred_1</span>, fill <span class='op'>=</span> <span class='va'>is_canceled</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_density</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.5</span>, color <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment1_files/figure-html5/unnamed-chunk-18-1.png" width="624" /></p>
+</div>
+<ul>
+<li>For an accuracy close to 1, the plot would have almost no overlap at all, as the true positive and true negative rates would each be close to 1.</li>
+<li>If we want to have a higher true positive rate, we should make the cutoff higher than 0.5, as only including predictions that are more likely to be canceled would filter out predicitions that were somewhat likely (i.e. 50%-60% likely) to be canceled that ended up not being canceled.</li>
+<li>If the true positive rate increases, the true negative rate should increase as well, because by increasing the true positive rate, we are eliminating incorrect predictions. Eliminating incorrect predictions will drive down the false negative rate.</li>
+</ul>
+<ol start="8" class="example" type="1">
+<li>Let’s say that this model is going to be applied to bookings 14 days in advance of their arrival at each hotel, and someone who works for the hotel will make a phone call to the person who made the booking. During this phone call, they will try to assure that the person will be keeping their reservation or that they will be canceling in which case they can do that now and still have time to fill the room. How should the hotel go about deciding who to call? How could they measure whether it was worth the effort to do the calling? Can you think of another way they might use the model?</li>
+</ol>
+<ul>
+<li>The hotel should first call people who are in room type P, as room type P is the most important variable when it comes to predicting whether a reservation will be canceled or not. The hotel should also look at the type of deposit that the reservation maker put down, as that is also very predictive of whether the reservation will be canceled or not. The way that they could measure whether the calls were worth it or not could be by looking at how many cancellations were discovered based on the calls versus the total number of cancellations. They could also observe how many reservations were made for the rooms after they were canceled as a result of the calls. Another way that they could use the model is by looking at the rooms that are canceled the most and making deposits on those rooms non-refundable.</li>
+</ul>
+<ol start="9" class="example" type="1">
+<li>How might you go about questioning and evaluating the model in terms of fairness? Are there any questions you would like to ask of the people who collected the data?</li>
+</ol>
+<ul>
+<li>In terms of fairness, we might want to discuss the potential issues with who we are evaluating. With regards to the individual, it is possible that we are only looking at wealthy people who can afford to go on vacation and stay at a hotel or a resort. With regards to the group reservation type, it is possible that the majority are either multiple wealthy friends, or families who are able to afford going on vacation. This is a situation where demographics are important, and I would want to ask the researchers about the demographics of the people who were making the reservations, as by including mostly wealthy people, the researchers would not be understanding the true trends of the population.</li>
+</ul>
+<h2 id="bias-and-fairness-reflection">Bias and Fairness Reflection</h2>
+<ul>
+<li>Throughout watching this lecture, I was not necessarily surprised by anything, but I did find it interesting how a lot of the biases used race as an example. I did not realize how much of an issue racial bias was in data science, and how large organizations such as Facebook, Amazon, and IBM are contributing to it so much. This lecture also helped me understand why it is so important to pay attention to bias in machine learning and when writing algorithms and I came to this conclusion: identifying biases can help people figure out when their algorithm is <strong>wrong</strong>. Identifying the potential biases in an algorithm can help a researcher find what, or who, their algorithm is omitting.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2292,6 +2573,15 @@ Assignments
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
