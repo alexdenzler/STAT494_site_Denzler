@@ -2592,8 +2592,8 @@ Assignments
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>late_flights_over20</span> <span class='op'>&lt;-</span> <span class='fu'>tbl</span><span class='op'>(</span><span class='va'>con_air</span>, <span class='st'>"flights"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>origin</span>, <span class='va'>month</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>year</span> <span class='op'>==</span> <span class='fl'>2017</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>origin</span>, <span class='va'>month</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>summarize</span><span class='op'>(</span>tot_depart <span class='op'>=</span> <span class='fu'>n</span><span class='op'>(</span><span class='op'>)</span>,
             avg_dist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>distance</span><span class='op'>)</span>,
             prop_late_over20 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>&gt;</span> <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
@@ -2601,26 +2601,25 @@ Assignments
              by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"origin"</span> <span class='op'>=</span> <span class='st'>"faa"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>select</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>month</span>, <span class='va'>tot_depart</span>, <span class='va'>avg_dist</span>, <span class='va'>prop_late_over20</span><span class='op'>)</span>
 
-<span class='va'>late_flights_over20</span>
+<span class='va'>late_flights_over20_df</span> <span class='op'>&lt;-</span> <span class='fu'>collect</span><span class='op'>(</span><span class='va'>late_flights_over20</span><span class='op'>)</span>
+<span class='va'>late_flights_over20_df</span>
 </code></pre>
 </div>
-<pre><code># Source:   lazy query [?? x 6]
-# Database: mysql 5.7.31-log
-#   [@mdsr.cdc7tgkkqd0n.us-east-1.rds.amazonaws.com:/airlines]
-# Groups:   origin
+<pre><code># A tibble: 3,466 x 6
+# Groups:   origin [312]
    origin name              month tot_depart avg_dist prop_late_over20
    &lt;chr&gt;  &lt;chr&gt;             &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;
- 1 ABE    Lehigh Valley In…     8        180     562.           0.1   
- 2 ABE    Lehigh Valley In…     9        206     606.           0.0777
- 3 ABE    Lehigh Valley In…    10        253     593.           0.134 
- 4 ABE    Lehigh Valley In…    11        220     585.           0.0909
- 5 ABE    Lehigh Valley In…     1        191     580.           0.147 
- 6 ABE    Lehigh Valley In…    12        168     590.           0.208 
- 7 ABE    Lehigh Valley In…     2        128     601.           0.0703
- 8 ABE    Lehigh Valley In…     3        167     561.           0.162 
- 9 ABE    Lehigh Valley In…     4        139     586.           0.137 
-10 ABE    Lehigh Valley In…     5        160     574.           0.112 
-# … with more rows</code></pre>
+ 1 ABE    Lehigh Valley In…     3        167     561.           0.162 
+ 2 ABE    Lehigh Valley In…     4        139     586.           0.137 
+ 3 ABE    Lehigh Valley In…     5        160     574.           0.112 
+ 4 ABE    Lehigh Valley In…     6        134     572.           0.112 
+ 5 ABE    Lehigh Valley In…     7        192     574.           0.135 
+ 6 ABE    Lehigh Valley In…     8        180     562.           0.1   
+ 7 ABE    Lehigh Valley In…     9        206     606.           0.0777
+ 8 ABE    Lehigh Valley In…    10        253     593.           0.134 
+ 9 ABE    Lehigh Valley In…    11        220     585.           0.0909
+10 ABE    Lehigh Valley In…     1        191     580.           0.147 
+# … with 3,456 more rows</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">SELECT</span></span>
@@ -2642,18 +2641,18 @@ Assignments
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>late_flights_over20</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>prop_late_over20</span><span class='op'>)</span>,
-             y <span class='op'>=</span> <span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>prop_late_over20</span>, <span class='va'>median</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_col</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"lightblue"</span><span class='op'>)</span> <span class='op'>+</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>late_flights_over20_df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>prop_late_over20</span>,
+             y <span class='op'>=</span> <span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>prop_late_over20</span>, <span class='va'>median</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='va'>month</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_col</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_color_fiv</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>scale_x_continuous</span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, 
                      labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_percent.html'>percent</a></span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='cn'>NA</span>,
-       y <span class='op'>=</span> <span class='cn'>NA</span>,
-       title <span class='op'>=</span> <span class='st'>"Which airlines had the largest % of flights that \nwere more than 20 minutes late from 2010-2017?"</span><span class='op'>)</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='cn'>NULL</span>,
+       y <span class='op'>=</span> <span class='cn'>NULL</span>,
+       title <span class='op'>=</span> <span class='st'>"Which airports had the largest % of flights that \nwere more than 20 minutes late in 2017?"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="Assignment3_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
 </div>
 <h2 id="function-friday">Function Friday</h2>
 <h3 id="geom_sf-tasks"><code>geom_sf()</code> Tasks</h3>
@@ -2696,7 +2695,7 @@ Geodetic CRS:  WGS 84
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>geom_sf</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_viridis_c</span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
            ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
            expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
@@ -2709,50 +2708,15 @@ Geodetic CRS:  WGS 84
 </ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>centroids</span> <span class='op'>&lt;-</span> <span class='va'>states</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>centroid <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>geom</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>centroids</span>
-</code></pre>
-</div>
-<pre><code>Simple feature collection with 49 features and 2 fields
-Active geometry column: geom
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -124.6813 ymin: 25.12993 xmax: -67.00742 ymax: 49.38323
-Geodetic CRS:  WGS 84
-First 10 features:
-                     ID                           geom         area
-1               alabama MULTIPOLYGON (((-87.46201 3... 132961793575
-2               arizona MULTIPOLYGON (((-114.6374 3... 294168620967
-3              arkansas MULTIPOLYGON (((-94.05103 3... 138290036953
-4            california MULTIPOLYGON (((-120.006 42... 405129770136
-5              colorado MULTIPOLYGON (((-102.0552 4... 270611143174
-6           connecticut MULTIPOLYGON (((-73.49902 4...  13077244477
-7              delaware MULTIPOLYGON (((-75.80231 3...   5208287753
-8  district of columbia MULTIPOLYGON (((-77.13731 3...    171310438
-9               florida MULTIPOLYGON (((-85.01548 3... 144849834879
-10              georgia MULTIPOLYGON (((-80.89018 3... 152064974817
-                     centroid
-1  POINT (-86.83042 32.80316)
-2   POINT (-111.6679 34.3006)
-3  POINT (-92.44013 34.90418)
-4  POINT (-119.6015 37.26901)
-5  POINT (-105.5525 38.99797)
-6  POINT (-72.72598 41.62566)
-7  POINT (-75.51492 39.00558)
-8   POINT (-77.0341 38.91079)
-9  POINT (-82.49181 28.65743)
-10 POINT (-83.45853 32.65165)</code></pre>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span>, <span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_viridis_c</span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
            ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
            expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>centroids</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>centroid <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>geom</span><span class='op'>)</span><span class='op'>)</span>, 
+             <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, 
+                 fill <span class='op'>=</span> <span class='st'>"white"</span>, color <span class='op'>=</span> <span class='st'>"black"</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -2764,11 +2728,12 @@ First 10 features:
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>counties</span>, fill <span class='op'>=</span> <span class='cn'>NA</span>, color <span class='op'>=</span> <span class='st'>"black"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span>, <span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_viridis_c</span><span class='op'>(</span>option <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
            ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
            expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'>#+</span>
-  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))</span>
+  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], </span>
+  <span class='co'>#                                 fill = "white", color = "black"))</span>
 </code></pre>
 </div>
 </div>
@@ -2784,11 +2749,12 @@ First 10 features:
   <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
            ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
            expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'>#+</span>
-  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))</span>
+  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], </span>
+  <span class='co'>#                                 fill = "white", color = "black"))</span>
 </code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

@@ -275,8 +275,8 @@ DESCRIBE airports
 
 ```{r}
 late_flights_over20 <- tbl(con_air, "flights") %>% 
-  group_by(origin, month) %>% 
   filter(year == 2017) %>%
+  group_by(origin, month) %>% 
   summarize(tot_depart = n(),
             avg_dist = mean(distance),
             prop_late_over20 = mean(arr_delay > 20)) %>% 
@@ -284,7 +284,8 @@ late_flights_over20 <- tbl(con_air, "flights") %>%
              by = c("origin" = "faa")) %>% 
   select(name, month, tot_depart, avg_dist, prop_late_over20)
 
-late_flights_over20
+late_flights_over20_df <- collect(late_flights_over20)
+late_flights_over20_df
 ```
 
 
@@ -306,16 +307,17 @@ SELECT
   
   * With the dataset you wrote out, create a graph that helps illustrate the “worst” airports in terms of late arrivals.
   
-```{r}
-late_flights_over20 %>% 
-  ggplot(aes(x = mean(prop_late_over20),
-             y = fct_reorder(name, prop_late_over20, median))) +
-  geom_col(fill = "lightblue") +
+```{r, fig.height=15, eval = FALSE}
+late_flights_over20_df %>% 
+  ggplot(aes(x = prop_late_over20,
+             y = fct_reorder(name, prop_late_over20, median), color = month)) +
+  geom_col() +
+  scale_color_fiv() +
   scale_x_continuous(expand = c(0,0), 
                      labels = scales::percent) +
-  labs(x = NA,
-       y = NA,
-       title = "Which airlines had the largest % of flights that \nwere more than 20 minutes late from 2010-2017?")
+  labs(x = NULL,
+       y = NULL,
+       title = "Which airports had the largest % of flights that \nwere more than 20 minutes late in 2017?")
 ```
   
 
@@ -344,7 +346,7 @@ head(states)
 ```{r}
 ggplot(data = states) +
   geom_sf(aes(fill = area)) +
-  scale_fill_gradient(low = "blue", high = "red") +
+  scale_fill_viridis_c(option = "C") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
            expand = FALSE)
@@ -352,21 +354,16 @@ ggplot(data = states) +
 
 2. Add a dot (or any symbol you want) to the centroid of each state.
 
-```{r}
-centroids <- states %>% 
-  mutate(centroid = st_centroid(geom))
-centroids
-```
-
-
 ```{r, eval=FALSE}
 ggplot() +
   geom_sf(data = states, aes(fill = area)) +
-  scale_fill_gradient(low = "blue", high = "red") +
+  scale_fill_viridis_c(option = "C") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
            expand = FALSE) +
-  geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+  geom_point(data = states %>% mutate(centroid = st_centroid(geom)), 
+             aes(x = centroid[1], y = centroid[2], 
+                 fill = "white", color = "black"))
 ```
 
 
@@ -376,11 +373,12 @@ ggplot() +
 ggplot() +
   geom_sf(data = counties, fill = NA, color = "black") +
   geom_sf(data = states, aes(fill = area)) +
-  scale_fill_gradient(low = "blue", high = "red") +
+  scale_fill_viridis_c(option = "C") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
            expand = FALSE) #+
-  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], 
+  #                                 fill = "white", color = "black"))
 ```
 
 
@@ -394,7 +392,8 @@ ggplot() +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
            expand = FALSE) #+
-  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], 
+  #                                 fill = "white", color = "black"))
 ```
 
 
