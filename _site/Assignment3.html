@@ -2386,8 +2386,409 @@ Assignments
 <li>These methods provide a helpful alternative to a simple variable importance plot, as we are able to identify variable importance on the level of individual observations. We are able to see why each observation contains the result that it does. The break-down plot method allows us to see how the entire training dataset is affected when we apply a certain model to it. The SHAP plots allow us to see how each variable contributes if we change the order of the variables (in this assignment, the contribution changes because the random forest model is not additive). Through this, we are able to see how true the effect is through the boxplots on top of the SHAP plot. Finally, the LIME plots allow us to see variable importance in conjunction with model performance, which gives us more insight into how trustworthy our result is.</li>
 </ul>
 <h2 id="sql">SQL</h2>
-<p>You will use the <code>airlines</code> data from the SQL database that Lisa used in the example in the tutorial. Be sure to include the chunk to connect to the database here. And, when you are finished, disconnect. You may need to reconnect throughout as it times out after a while.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>I will use the <code>airlines</code> data from the SQL database that Lisa used in the example in the tutorial.</p>
+<p><strong>Tasks</strong></p>
+<ol type="1">
+<li>Create a SQL chunk and an equivalent R code chunk that does the following: for 2017, for each airport (with its name, not code), and month find the total number of departing flights, the average distance of the flight, and the proportion of flights that arrived more than 20 minutes late. In the R code chunk, write this out to a dataset.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>con_air</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mdsr/man/src_scidb.html'>dbConnect_scidb</a></span><span class='op'>(</span><span class='st'>"airlines"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1"></a>DESCRIBE flights</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-10">Table 1: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Null</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;">MUL</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">month</td>
+<td style="text-align: left;">smallint(2)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">day</td>
+<td style="text-align: left;">smallint(2)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dep_time</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sched_dep_time</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dep_delay</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">arr_time</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sched_arr_time</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">arr_delay</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">carrier</td>
+<td style="text-align: left;">varchar(2)</td>
+<td style="text-align: left;">NO</td>
+<td style="text-align: left;">MUL</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1"></a>DESCRIBE airports</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-11">Table 2: </span>9 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Null</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">faa</td>
+<td style="text-align: left;">varchar(3)</td>
+<td style="text-align: left;">NO</td>
+<td style="text-align: left;">PRI</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lat</td>
+<td style="text-align: left;">decimal(10,7)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lon</td>
+<td style="text-align: left;">decimal(10,7)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">alt</td>
+<td style="text-align: left;">int(11)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tz</td>
+<td style="text-align: left;">smallint(4)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dst</td>
+<td style="text-align: left;">char(1)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">city</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">varchar(255)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>late_flights_over20</span> <span class='op'>&lt;-</span> <span class='fu'>tbl</span><span class='op'>(</span><span class='va'>con_air</span>, <span class='st'>"flights"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>origin</span>, <span class='va'>month</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>year</span> <span class='op'>==</span> <span class='fl'>2017</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>summarize</span><span class='op'>(</span>tot_depart <span class='op'>=</span> <span class='fu'>n</span><span class='op'>(</span><span class='op'>)</span>,
+            avg_dist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>distance</span><span class='op'>)</span>,
+            prop_late_over20 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>arr_delay</span> <span class='op'>&gt;</span> <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>inner_join</span><span class='op'>(</span><span class='fu'>tbl</span><span class='op'>(</span><span class='va'>con_air</span>, <span class='st'>"airports"</span><span class='op'>)</span>,
+             by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"origin"</span> <span class='op'>=</span> <span class='st'>"faa"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>month</span>, <span class='va'>tot_depart</span>, <span class='va'>avg_dist</span>, <span class='va'>prop_late_over20</span><span class='op'>)</span>
+
+<span class='va'>late_flights_over20</span>
+</code></pre>
+</div>
+<pre><code># Source:   lazy query [?? x 6]
+# Database: mysql 5.7.31-log
+#   [@mdsr.cdc7tgkkqd0n.us-east-1.rds.amazonaws.com:/airlines]
+# Groups:   origin
+   origin name              month tot_depart avg_dist prop_late_over20
+   &lt;chr&gt;  &lt;chr&gt;             &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;
+ 1 ABE    Lehigh Valley In…     8        180     562.           0.1   
+ 2 ABE    Lehigh Valley In…     9        206     606.           0.0777
+ 3 ABE    Lehigh Valley In…    10        253     593.           0.134 
+ 4 ABE    Lehigh Valley In…    11        220     585.           0.0909
+ 5 ABE    Lehigh Valley In…     1        191     580.           0.147 
+ 6 ABE    Lehigh Valley In…    12        168     590.           0.208 
+ 7 ABE    Lehigh Valley In…     2        128     601.           0.0703
+ 8 ABE    Lehigh Valley In…     3        167     561.           0.162 
+ 9 ABE    Lehigh Valley In…     4        139     586.           0.137 
+10 ABE    Lehigh Valley In…     5        160     574.           0.112 
+# … with more rows</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">SELECT</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="dt">year</span>,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  arr_delay,</span>
+<span id="cb11-4"><a href="#cb11-4"></a>  origin,</span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_flights,</span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">AVG</span>(arr_delay <span class="op">&gt;</span> <span class="dv">20</span>) <span class="kw">AS</span> prop_late_over20,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="fu">AVG</span>(distance) <span class="kw">AS</span> avg_dist</span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="kw">FROM</span> flights</span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="kw">WHERE</span> <span class="dt">year</span> <span class="op">=</span> <span class="dv">2017</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a>  <span class="kw">GROUP</span> <span class="kw">BY</span> origin, <span class="dt">month</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> airports <span class="kw">AS</span> a</span>
+<span id="cb11-12"><a href="#cb11-12"></a>    <span class="kw">ON</span> (flights.origin <span class="op">=</span> a.faa)</span>
+<span id="cb11-13"><a href="#cb11-13"></a>  <span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dt">year</span>, prop_late_over20 <span class="kw">DESC</span>;</span></code></pre></div>
+</div>
+<ul>
+<li>With the dataset you wrote out, create a graph that helps illustrate the “worst” airports in terms of late arrivals.</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>late_flights_over20</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>prop_late_over20</span><span class='op'>)</span>,
+             y <span class='op'>=</span> <span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>prop_late_over20</span>, <span class='va'>median</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_col</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"lightblue"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_x_continuous</span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, 
+                     labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_percent.html'>percent</a></span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='cn'>NA</span>,
+       y <span class='op'>=</span> <span class='cn'>NA</span>,
+       title <span class='op'>=</span> <span class='st'>"Which airlines had the largest % of flights that \nwere more than 20 minutes late from 2010-2017?"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment3_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
+</div>
+<h2 id="function-friday">Function Friday</h2>
+<h3 id="geom_sf-tasks"><code>geom_sf()</code> Tasks</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='fu'>maps</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span><span class='op'>(</span><span class='st'>"state"</span>, 
+                             plot <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+                             fill <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>counties</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='fu'>maps</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span><span class='op'>(</span><span class='st'>"county"</span>, 
+                               plot <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+                               fill <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>states</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>area <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/geos_measures.html'>st_area</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Simple feature collection with 6 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.3834 ymin: 30.24071 xmax: -71.78015 ymax: 42.04937
+Geodetic CRS:  WGS 84
+           ID                           geom         area
+1     alabama MULTIPOLYGON (((-87.46201 3... 132961793575
+2     arizona MULTIPOLYGON (((-114.6374 3... 294168620967
+3    arkansas MULTIPOLYGON (((-94.05103 3... 138290036953
+4  california MULTIPOLYGON (((-120.006 42... 405129770136
+5    colorado MULTIPOLYGON (((-102.0552 4... 270611143174
+6 connecticut MULTIPOLYGON (((-73.49902 4...  13077244477</code></pre>
+</div>
+<ol type="1">
+<li>Change the color scheme of the map from the default blue (one option could be viridis).</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_sf</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
+           ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
+           expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment3_files/figure-html5/unnamed-chunk-17-1.png" width="624" /></p>
+</div>
+<ol start="2" type="1">
+<li>Add a dot (or any symbol you want) to the centroid of each state.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>centroids</span> <span class='op'>&lt;-</span> <span class='va'>states</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>centroid <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>geom</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>centroids</span>
+</code></pre>
+</div>
+<pre><code>Simple feature collection with 49 features and 2 fields
+Active geometry column: geom
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.6813 ymin: 25.12993 xmax: -67.00742 ymax: 49.38323
+Geodetic CRS:  WGS 84
+First 10 features:
+                     ID                           geom         area
+1               alabama MULTIPOLYGON (((-87.46201 3... 132961793575
+2               arizona MULTIPOLYGON (((-114.6374 3... 294168620967
+3              arkansas MULTIPOLYGON (((-94.05103 3... 138290036953
+4            california MULTIPOLYGON (((-120.006 42... 405129770136
+5              colorado MULTIPOLYGON (((-102.0552 4... 270611143174
+6           connecticut MULTIPOLYGON (((-73.49902 4...  13077244477
+7              delaware MULTIPOLYGON (((-75.80231 3...   5208287753
+8  district of columbia MULTIPOLYGON (((-77.13731 3...    171310438
+9               florida MULTIPOLYGON (((-85.01548 3... 144849834879
+10              georgia MULTIPOLYGON (((-80.89018 3... 152064974817
+                     centroid
+1  POINT (-86.83042 32.80316)
+2   POINT (-111.6679 34.3006)
+3  POINT (-92.44013 34.90418)
+4  POINT (-119.6015 37.26901)
+5  POINT (-105.5525 38.99797)
+6  POINT (-72.72598 41.62566)
+7  POINT (-75.51492 39.00558)
+8   POINT (-77.0341 38.91079)
+9  POINT (-82.49181 28.65743)
+10 POINT (-83.45853 32.65165)</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span>, <span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
+           ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
+           expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>centroids</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>centroid</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Add a layer onto the map with the counties.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>counties</span>, fill <span class='op'>=</span> <span class='cn'>NA</span>, color <span class='op'>=</span> <span class='st'>"black"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span>, <span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
+           ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
+           expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'>#+</span>
+  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))</span>
+</code></pre>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Change the coordinates of the map to zoom in on your favorite state.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='co'>#geom_sf(data = counties, fill = NA, color = "black") +</span>
+  <span class='fu'>geom_sf</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>states</span>, <span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_gradient</span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"blue"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_sf</span><span class='op'>(</span>xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>127</span>, <span class='op'>-</span><span class='fl'>63</span><span class='op'>)</span>, 
+           ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>24</span>, <span class='fl'>51</span><span class='op'>)</span>, 
+           expand <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'>#+</span>
+  <span class='co'>#geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))</span>
+</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

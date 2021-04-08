@@ -253,9 +253,156 @@ plot(house_lime_rf3) +
 
 ## SQL 
 
-You will use the `airlines` data from the SQL database that Lisa used in the example in the tutorial. Be sure to include the chunk to connect to the database here. And, when you are finished, disconnect. You may need to reconnect throughout as it times out after a while.
+I will use the `airlines` data from the SQL database that Lisa used in the example in the tutorial.
+
+**Tasks**
+
+  1. Create a SQL chunk and an equivalent R code chunk that does the following: for 2017, for each airport (with its name, not code), and month find the total number of departing flights, the average distance of the flight, and the proportion of flights that arrived more than 20 minutes late. In the R code chunk, write this out to a dataset.
   
+```{r}
+con_air <- dbConnect_scidb("airlines")
+```
+
+
+```{sql connection=con_air}
+DESCRIBE flights
+```
+
+```{sql connection=con_air}
+DESCRIBE airports
+```
+
+
+```{r}
+late_flights_over20 <- tbl(con_air, "flights") %>% 
+  group_by(origin, month) %>% 
+  filter(year == 2017) %>%
+  summarize(tot_depart = n(),
+            avg_dist = mean(distance),
+            prop_late_over20 = mean(arr_delay > 20)) %>% 
+  inner_join(tbl(con_air, "airports"),
+             by = c("origin" = "faa")) %>% 
+  select(name, month, tot_depart, avg_dist, prop_late_over20)
+
+late_flights_over20
+```
+
+
+```{sql connection=con_air, eval=FALSE}
+SELECT
+  year,
+  arr_delay,
+  origin,
+  COUNT(*) AS n_flights,
+  AVG(arr_delay > 20) AS prop_late_over20,
+  AVG(distance) AS avg_dist
+  FROM flights
+  WHERE year = 2017
+  GROUP BY origin, month
+  INNER JOIN airports AS a
+    ON (flights.origin = a.faa)
+  ORDER BY year, prop_late_over20 DESC;
+```
   
+  * With the dataset you wrote out, create a graph that helps illustrate the “worst” airports in terms of late arrivals.
+  
+```{r}
+late_flights_over20 %>% 
+  ggplot(aes(x = mean(prop_late_over20),
+             y = fct_reorder(name, prop_late_over20, median))) +
+  geom_col(fill = "lightblue") +
+  scale_x_continuous(expand = c(0,0), 
+                     labels = scales::percent) +
+  labs(x = NA,
+       y = NA,
+       title = "Which airlines had the largest % of flights that \nwere more than 20 minutes late from 2010-2017?")
+```
+  
+
+## Function Friday
+
+### `geom_sf()` Tasks
+
+```{r}
+states <- st_as_sf(maps::map("state", 
+                             plot = FALSE, 
+                             fill = TRUE))
+
+counties <- st_as_sf(maps::map("county", 
+                               plot = FALSE, 
+                               fill = TRUE))
+```
+
+```{r}
+states <- states %>%
+  mutate(area = as.numeric(st_area(states)))
+head(states)
+```
+
+1. Change the color scheme of the map from the default blue (one option could be viridis).
+
+```{r}
+ggplot(data = states) +
+  geom_sf(aes(fill = area)) +
+  scale_fill_gradient(low = "blue", high = "red") +
+  coord_sf(xlim = c(-127, -63), 
+           ylim = c(24, 51), 
+           expand = FALSE)
+```
+
+2. Add a dot (or any symbol you want) to the centroid of each state.
+
+```{r}
+centroids <- states %>% 
+  mutate(centroid = st_centroid(geom))
+centroids
+```
+
+
+```{r, eval=FALSE}
+ggplot() +
+  geom_sf(data = states, aes(fill = area)) +
+  scale_fill_gradient(low = "blue", high = "red") +
+  coord_sf(xlim = c(-127, -63), 
+           ylim = c(24, 51), 
+           expand = FALSE) +
+  geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+```
+
+
+3. Add a layer onto the map with the counties.
+
+```{r, eval=FALSE}
+ggplot() +
+  geom_sf(data = counties, fill = NA, color = "black") +
+  geom_sf(data = states, aes(fill = area)) +
+  scale_fill_gradient(low = "blue", high = "red") +
+  coord_sf(xlim = c(-127, -63), 
+           ylim = c(24, 51), 
+           expand = FALSE) #+
+  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+```
+
+
+4. Change the coordinates of the map to zoom in on your favorite state.
+
+```{r, eval=FALSE}
+ggplot() +
+  #geom_sf(data = counties, fill = NA, color = "black") +
+  geom_sf(data = states, aes(fill = area)) +
+  scale_fill_gradient(low = "blue", high = "red") +
+  coord_sf(xlim = c(-127, -63), 
+           ylim = c(24, 51), 
+           expand = FALSE) #+
+  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2]))
+```
+
+
+
+
+
+
+
 
 
 
