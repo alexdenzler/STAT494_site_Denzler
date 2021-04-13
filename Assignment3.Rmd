@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-#knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 ```
 
 ```{r libraries}
@@ -406,7 +406,7 @@ ggplot(data = states) +
 
 2. Add a dot (or any symbol you want) to the centroid of each state.
 
-```{r, eval=FALSE}
+```{r}
 ggplot(data = states) +
   geom_sf(aes(fill = area)) +
   scale_fill_viridis_c(option = "C") +
