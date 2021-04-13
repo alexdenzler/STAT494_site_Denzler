@@ -27,6 +27,7 @@ library(dbplyr)            # for SQL query "cheating" - part of tidyverse but ne
 library(mdsr)              # for accessing some databases - goes with Modern Data Science with R textbook
 library(RMySQL)            # for accessing MySQL databases
 library(RSQLite)           # for accessing SQLite databases
+library(plotly)            # for interactive plots
 
 #mapping
 library(maps)              # for built-in maps
@@ -129,6 +130,8 @@ new_obs3 <- house_test %>% slice(3)
 #### Break-Down Plots
   
 ```{r}
+set.seed(494)
+
 house_pp_rf1 <- predict_parts(explainer = house_rf_explain,
                        new_observation = new_obs1,
                        type = "break_down")
@@ -146,11 +149,11 @@ plot(house_pp_rf2)
 plot(house_pp_rf3)
 ```
 
-  * The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or \$462,381. We  see that holding constant at 6 affects the overall average price the most, and decreases the log price by 0.03, or \$30,861.90. The predicted log price for this observation is 5.577, or \$377,572.20.
+  * The average log price remains the same across all observations, as it is the average log price when applied to all of the training data. This log price is 5.665, or \$462,381. We  see that holding latitude constant at 47.698 affects the overall average price the most, and increases the log price by 0.084, or \$98,666.95. The predicted log price for this observation is 5.653, or \$449,779.90.
 
-  * The second plot shows us that fixing our latitude at 47.6272 increases the average log price by 0.113, or \$137,410.10. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.862, or \$727,779.80.
+  * The second plot shows us that fixing our latitude at 47.5197 decreases the average log price by 0.051, or \$51,231.30. We also see that holding this latitude constant affects the price the most. Finally, the predicted log price for this observation is 5.599, or \$397,191.50.
 
-  * The third plot shows us that fixing our latitude at 47.5123 decreases the log price by 0.069, or \$67,923.70. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.46, or \$288,403.20.
+  * The third plot shows us that fixing our latitude at 47.6127 increases the log price by 0.109, or \$131,911.10. Holding this latitude constant affects the predicted price the most. This predicted log price is 5.59, or \$389,045.10.
 
 
 #### Shapley Additive Explanationss (SHAP) Plots
@@ -226,6 +229,8 @@ house_lime_rf3 %>%
 ```
 
 ```{r}
+set.seed(494)
+
 plot(house_lime_rf1) +
   labs(x = "Variable")
 
@@ -289,35 +294,81 @@ late_flights_over20_df
 ```
 
 
-```{sql connection=con_air, eval=FALSE}
-SELECT
-  year,
-  arr_delay,
-  origin,
-  COUNT(*) AS n_flights,
-  AVG(arr_delay > 20) AS prop_late_over20,
-  AVG(distance) AS avg_dist
-  FROM flights
-  WHERE year = 2017
-  GROUP BY origin, month
-  INNER JOIN airports AS a
-    ON (flights.origin = a.faa)
-  ORDER BY year, prop_late_over20 DESC;
+```{r}
+late_flights_over20 %>% 
+  show_query()
 ```
   
   * With the dataset you wrote out, create a graph that helps illustrate the “worst” airports in terms of late arrivals.
   
-```{r, fig.height=15, eval = FALSE}
-late_flights_over20_df %>% 
-  ggplot(aes(x = prop_late_over20,
-             y = fct_reorder(name, prop_late_over20, median), color = month)) +
+```{r}
+late_plot <- ggplot(late_flights_over20_df %>% 
+                    mutate(month = as.factor(month),
+                    mean_prop = mean(prop_late_over20)) %>% 
+                    group_by(mean_prop, name) %>% 
+                    arrange(desc(mean_prop)) %>% 
+                    head(200), 
+                    aes(x = tot_depart, y = mean_prop)) +
+geom_point(aes(size = avg_dist, color = name), alpha = .5) +
+labs(x = "Average Distance Traveled",
+     y = "Total Departures",
+     title = "Which airports had the largest % of flights that \nwere more than 20 minutes late in 2017?") +
+theme(legend.position = "none")
+
+ggplotly(late_plot)
+```
+
+
+Create a table with 6 or fewer rows and 3 or fewer columns that summarizes which airport is the “worst” in terms of late arrivals.
+
+```{r}
+late_flights_over20_simple <- tbl(con_air, "flights") %>% 
+  filter(year == 2017) %>%
+  group_by(origin) %>% 
+  summarize(tot_depart = n(),
+            prop_late_over20 = mean(arr_delay > 20)) %>% 
+  inner_join(tbl(con_air, "airports"),
+             by = c("origin" = "faa")) %>%
+  ungroup() %>% 
+  group_by(name) %>% 
+  select(name, tot_depart, prop_late_over20, -origin) %>% 
+  arrange(desc(prop_late_over20)) %>% 
+  head(6)
+  
+late_flights_over20_simple_df <- collect(late_flights_over20_simple)
+late_flights_over20_simple_df
+```
+
+  2. An original SQL query and plot
+  
+  Find the proportion of flights that arrive on time during winter months, with average flight distance, and sdee which airlines perform best by this metric.
+  
+```{r}
+on_time_winter <- tbl(con_air, "flights") %>% 
+  filter(year == 2017, month %in% c(11, 12, 1, 2, 3)) %>%
+  group_by(carrier) %>% 
+  summarize(tot_depart = n(),
+            avg_dist = mean(distance),
+            prop_on_time = mean(arr_delay <= 0)) %>% 
+  select(tot_depart, avg_dist, carrier, prop_on_time)
+
+on_time_winter_df <- collect(on_time_winter)
+on_time_winter_df
+```
+  
+```{r}
+on_time_winter %>% 
+  show_query()
+```
+  
+```{r}
+on_time_winter_df %>% 
+  ggplot(aes(x = prop_on_time, y = fct_reorder(carrier, prop_on_time), fill = avg_dist)) +
   geom_col() +
-  scale_color_fiv() +
-  scale_x_continuous(expand = c(0,0), 
-                     labels = scales::percent) +
-  labs(x = NULL,
-       y = NULL,
-       title = "Which airports had the largest % of flights that \nwere more than 20 minutes late in 2017?")
+  labs(title = "Airlines with the Highest Proportion of \nOn-Time Flights during Winter Months",
+       x = "Proportion of On-Time Arrivals",
+       y = "Carrier",
+       fill = "Average Flight Distance")
 ```
   
 
@@ -349,59 +400,186 @@ ggplot(data = states) +
   scale_fill_viridis_c(option = "C") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
-           expand = FALSE)
+           expand = FALSE) +
+  theme_minimal()
 ```
 
 2. Add a dot (or any symbol you want) to the centroid of each state.
 
 ```{r, eval=FALSE}
-ggplot() +
-  geom_sf(data = states, aes(fill = area)) +
+ggplot(data = states) +
+  geom_sf(aes(fill = area)) +
   scale_fill_viridis_c(option = "C") +
+  stat_sf_coordinates(color = "white") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
            expand = FALSE) +
-  geom_point(data = states %>% mutate(centroid = st_centroid(geom)), 
-             aes(x = centroid[1], y = centroid[2], 
-                 fill = "white", color = "black"))
+  theme_minimal()
 ```
 
 
 3. Add a layer onto the map with the counties.
 
-```{r, eval=FALSE}
+```{r}
 ggplot() +
-  geom_sf(data = counties, fill = NA, color = "black") +
   geom_sf(data = states, aes(fill = area)) +
+  geom_sf(data = counties, fill = NA, color = "black") +
   scale_fill_viridis_c(option = "C") +
   coord_sf(xlim = c(-127, -63), 
            ylim = c(24, 51), 
-           expand = FALSE) #+
-  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], 
-  #                                 fill = "white", color = "black"))
+           expand = FALSE) +
+  theme_minimal()
 ```
 
 
 4. Change the coordinates of the map to zoom in on your favorite state.
 
-```{r, eval=FALSE}
+```{r}
 ggplot() +
-  #geom_sf(data = counties, fill = NA, color = "black") +
-  geom_sf(data = states, aes(fill = area)) +
-  scale_fill_gradient(low = "blue", high = "red") +
-  coord_sf(xlim = c(-127, -63), 
-           ylim = c(24, 51), 
-           expand = FALSE) #+
-  #geom_point(data = centroids, aes(x = centroid[1], y = centroid[2], 
-  #                                 fill = "white", color = "black"))
+  geom_sf(data = states %>% filter(ID == "new york"), aes(fill = area)) +
+  geom_sf(data = counties, fill = NA, color = "black") +
+  scale_fill_viridis_c(option = "C") +
+  coord_sf(xlim = c(-80, -71.8), 
+           ylim = c(40.4, 45.1),
+           expand = FALSE) +
+  theme_minimal()
 ```
 
 
 
 
+### `tidytext` tasks
+
+These are tweets from Twitter handles that are connected to the Internet Research Agency (IRA), a Russian “troll factory.” The majority of these tweets were posted from 2015-2017, but the datasets encompass tweets from February 2012 to May 2018.
+
+Three of the main categories of troll tweet that we will be focusing on are Left Trolls, Right Trolls, and News Feed. **Left Trolls** usually pretend to be BLM activists, aiming to divide the democratic party (in this context, being pro-Bernie so that votes are taken away from Hillary). **Right trolls** imitate Trump supporters, and **News Feed** handles are “local news aggregators,” typically linking to legitimate news.
+
+For our upcoming analyses, some important variables are:
+
+* **author** (handle sending the tweet)
+* **content** (text of the tweet)
+* **language** (language of the tweet)
+* **publish_date** (date and time the tweet was sent)
 
 
+  1. Read in Troll Tweets Dataset
+  
+```{r, cache=TRUE}
+troll_tweets <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/russian-troll-tweets/master/IRAhandle_tweets_12.csv")
+```
+  
+  2. Basic Data Cleaning and Exploration
+  
+  a. Remove rows where the tweet was in a language other than English
+  b. Report the dimensions of the dataset
+  c. Create two or three basic exploratory plots of the data (ex. plot of the different locations from which tweets were posted, plot of the account category of a tweet)
+  
+```{r}
+troll_tweets_clean <- troll_tweets %>% 
+  filter(language == "English")
 
+dim(troll_tweets_clean)
+```
+  
+```{r}
+troll_tweets_clean %>% 
+  filter(account_type == "Left") %>% 
+  ggplot() +
+  geom_point(aes(x = following, y = followers, color = updates), alpha = .5)
+```
+  
+  
+```{r}
+troll_tweets_clean %>% 
+  filter(account_type == "Right") %>% 
+  ggplot() +
+  geom_point(aes(x = following, y = followers, color = updates), alpha = .5)
+```
+  
+  
+```{r}
+troll_tweets_clean %>% 
+  filter(account_type == "Russian") %>% 
+  ggplot() +
+  geom_point(aes(x = following, y = followers, color = updates), alpha = .5)
+```
+  
+  
+  3. Unnest Tokens: We want each row to represent a word from a tweet, rather than an entire tweet.
+  
+```{r}
+troll_tweets_untoken <- troll_tweets_clean %>%
+  unnest_tokens(word, content)
+
+troll_tweets_untoken
+```
+  
+  4. Remove stopwords
+  
+```{r}
+troll_tweets_cleaner <- troll_tweets_untoken %>%
+  anti_join(stop_words)
+```
+  
+```{r}
+troll_tweets_cleaner <- troll_tweets_cleaner %>%
+  filter(!word %in% c("http", "https", "t.co", "rt", "amp", 0:9, "a:z"))
+```
+  
+  
+  5. See how often top words appear
+  
+```{r}
+troll_tweets_small <- troll_tweets_cleaner %>%
+  count(word) %>% 
+  slice_max(order_by = n, n = 50) # 50 most occurring words
+
+# visualize the number of times the 50 top words appear
+ggplot(troll_tweets_small, 
+       aes(y = fct_reorder(word,n), x = n)) +
+  geom_col()
+```
+  
+  
+  6. Sentiment Analysis
+  
+  a. Get the sentiments using the “bing” parameter (which classifies words into “positive” or “negative”)
+  b. Report how many positive and negative words there are in the dataset. Are there more positive or negative words, and why do you think this might be?
+  
+```{r}
+get_sentiments("bing")
+
+troll_tweets_sentiment <- troll_tweets_cleaner %>%
+  inner_join(sentiments)
+
+troll_tweets_sentiment %>% 
+  count(sentiment)
+```
+  
+  I believe that there are many more negative words because people tend to focus more on negative events, and tweets by bots or trolls tend to only focus on negative events in an attempt to stir up negativity. 
+  
+
+  7. Using the troll_tweets_small dataset, make a wordcloud:
+  a. That is sized by the number of times that a word appears in the tweets
+  b. That is colored by sentiment (positive or negative)
+  
+```{r}
+troll_tweets_small %>%
+  with(wordcloud(word, n, max.words = 50))
+
+
+troll_tweets_sentiment %>%
+  group_by(word) %>% 
+  mutate(n = n()) %>% 
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = c("red","green"),
+                   max.words = 50)
+```
+  
+
+## "Undoing" Bias
+
+* The bias starting in the data point is a very concerning point because data collection is so often unfair. However, it seems like a lot of this is due to how data is regulated. From what I understand, all race and gender data is reliant on self-report measures that people are able to opt out of. I also understand that in some situations it is actually illegal to collect race or gender data. Because of this information, I am worried about the future of gender and racial bias. I have always had worries about self-report methods, as they are often unreliable for a multitude of reasons. In certain situations, in order to create fair algorithms, laws on gender and race reporting will have to change for these algorithms to make a true positive difference. 
 
 
 
