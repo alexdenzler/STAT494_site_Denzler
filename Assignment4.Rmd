@@ -1,0 +1,99 @@
+---
+title: "Assignment #4"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+##knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r libraries}
+#Regular expressions
+library(tidyverse)        # contains stringr for regex
+library(googlesheets4)    # for reading in data
+gs4_deauth()              # to read in google sheet (or download)
+
+#tmap
+library(tmap)
+library(pacman)
+```
+
+
+## Put it on GitHub
+
+[Here](https://github.com/alexdenzler/STAT494_site_Denzler) is my GitHub link.
+
+## Regular Expressions
+
+```{r cache=TRUE}
+bestsellers <- read_sheet("https://docs.google.com/spreadsheets/d/1n3xKHK4-t5S73LgxOJVJWT5fMYjLj7kqmYl1LHkpk80/edit?usp=sharing")
+```
+
+  1. Find books with multiple authors (HINT: Consider the possibility of an author having “and” in their name)
+  
+```{r}
+bestsellers %>% 
+  mutate(mult_auth = str_detect(author, "\\sand\\s")) %>% 
+  filter(mult_auth == "TRUE") %>% 
+  summarize(title, author, mult_auth)
+```
+  
+  
+  2. Detect if the author’s first name starts with a vowel
+  
+```{r}
+bestsellers %>% 
+  mutate(vowel = str_detect(author, "^[AEIOU]")) %>% 
+  filter(vowel == "TRUE") %>% 
+  summarize(author, vowel)
+```
+  
+  3. Change all authors with the name Alexander to Alex
+  
+```{r}
+bestsellers %>% 
+  mutate(names = str_replace_all(author, "Alexander", "Alex"))
+```
+  
+  4. Find books that are the second book in a series
+
+```{r}
+bestsellers %>%
+  mutate(series = str_detect(bestsellers %>% pull(description), 
+                             pattern = "second book")) %>%
+  filter(series == TRUE)
+```
+  
+  
+  5. Find books that are the third or fourth one in a series
+  
+```{r}
+bestsellers %>%
+  mutate(series = str_detect(bestsellers %>% pull(description), 
+                          pattern = "(third|fourth) book")) %>%
+  filter(series == TRUE)
+```
+  
+  6. Find books that are the 10th, 11th, …, or 19th book in a series
+  
+```{r}
+bestsellers %>%
+  mutate(series = str_detect(bestsellers %>% pull(description), 
+                          pattern = "1[0-9]th book")) %>%
+  filter(series == TRUE)
+```
+  
+  
+  7. Describe in your own words how you would go about writing a regular expression for password pattern matching (ie 8 character minimum, one capital letter minimum, one lowercase letter minimum, one digit minimum, one special character minimum)
+  
+  
+  
+  
+  
+
+
