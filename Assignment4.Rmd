@@ -89,8 +89,14 @@ bestsellers %>%
 ```
   
   
-  7. Describe in your own words how you would go about writing a regular expression for password pattern matching (ie 8 character minimum, one capital letter minimum, one lowercase letter minimum, one digit minimum, one special character minimum)
+  7. Describe in your own words how you would go about writing a regular expression for password pattern matching (i.e. 8 character minimum, one capital letter minimum, one lowercase letter minimum, one digit minimum, one special character minimum)
   
+  * Each regular expression would have to check to see if the range or requirements were included in the password. We would be able to use `str_detect()` and have each regular expression check for a capital letter, a lowercase letter, a digit, and a special character (whcih could be written like this $[a-z][A-Z]\d\W$). 
+  
+  
+## `tmap` Exercises
+
+
   
   
   

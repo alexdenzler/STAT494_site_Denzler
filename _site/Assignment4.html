@@ -2272,8 +2272,12 @@ Assignments
 # … with 32 more rows</code></pre>
 </div>
 <ol start="7" type="1">
-<li>Describe in your own words how you would go about writing a regular expression for password pattern matching (ie 8 character minimum, one capital letter minimum, one lowercase letter minimum, one digit minimum, one special character minimum)</li>
+<li>Describe in your own words how you would go about writing a regular expression for password pattern matching (i.e. 8 character minimum, one capital letter minimum, one lowercase letter minimum, one digit minimum, one special character minimum)</li>
 </ol>
+<ul>
+<li>Each regular expression would have to check to see if the range or requirements were included in the password. We would be able to use <code>str_detect()</code> and have each regular expression check for a capital letter, a lowercase letter, a digit, and a special character (whcih could be written like this <span class="math inline">\([a-z][A-Z]\d\W\)</span>).</li>
+</ul>
+<h2 id="tmap-exercises"><code>tmap</code> Exercises</h2>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -2282,6 +2286,15 @@ Assignments
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
