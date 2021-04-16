@@ -2120,23 +2120,22 @@ Assignments
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>bestsellers</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>mutate</span><span class='op'>(</span>mult_auth <span class='op'>=</span> <span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>author</span>, <span class='st'>"\\sand\\s"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>mult_auth</span> <span class='op'>==</span> <span class='st'>"TRUE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>summarize</span><span class='op'>(</span><span class='va'>title</span>, <span class='va'>author</span>, <span class='va'>mult_auth</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>mult_auth</span> <span class='op'>==</span> <span class='st'>"TRUE"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 234 x 3
-   title                    author                           mult_auth
-   &lt;chr&gt;                    &lt;chr&gt;                            &lt;lgl&gt;    
- 1 THE SENTINEL             Lee Child and Andrew Child       TRUE     
- 2 PIECE OF MY HEART        Mary Higgins Clark and Alafair … TRUE     
- 3 MARAUDER                 Clive Cussler and Boyd Morrison  TRUE     
- 4 THREE WOMEN DISAPPEAR    James Patterson and Shan Serafin TRUE     
- 5 THE COAST-TO-COAST MURD… James Patterson and JD Barker    TRUE     
- 6 1ST CASE                 James Patterson and Chris Tebbe… TRUE     
- 7 THE SUMMER HOUSE         James Patterson and Brendan DuB… TRUE     
- 8 MEMOIRS AND MISINFORMAT… Jim Carrey and Dana Vachon       TRUE     
- 9 THE 20TH VICTIM          James Patterson and Maxine Paet… TRUE     
-10 WRATH OF POSEIDON        Clive Cussler and Robin Burcell  TRUE     
+<pre><code># A tibble: 234 x 6
+   title   description      contributor   author   publisher mult_auth
+   &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;     &lt;lgl&gt;    
+ 1 THE SE… Jack Reacher in… by Lee Child… Lee Chi… Delacorte TRUE     
+ 2 PIECE … As their weddin… by Mary Higg… Mary Hi… Simon &amp; … TRUE     
+ 3 MARAUD… The 15th book i… by Clive Cus… Clive C… Putnam    TRUE     
+ 4 THREE … Detective Sean … by James Pat… James P… Little, … TRUE     
+ 5 THE CO… A detective and… by James Pat… James P… Little, … TRUE     
+ 6 1ST CA… After getting k… by James Pat… James P… Little, … TRUE     
+ 7 THE SU… Jeremiah Cook, … by James Pat… James P… Little, … TRUE     
+ 8 MEMOIR… A character nam… by Jim Carre… Jim Car… Knopf     TRUE     
+ 9 THE 20… The 20th book i… by James Pat… James P… Little, … TRUE     
+10 WRATH … The 12th book i… by Clive Cus… Clive C… Putnam    TRUE     
 # … with 224 more rows</code></pre>
 </div>
 <ol start="2" type="1">
@@ -2146,23 +2145,22 @@ Assignments
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>bestsellers</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>mutate</span><span class='op'>(</span>vowel <span class='op'>=</span> <span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>author</span>, <span class='st'>"^[AEIOU]"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>vowel</span> <span class='op'>==</span> <span class='st'>"TRUE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>summarize</span><span class='op'>(</span><span class='va'>author</span>, <span class='va'>vowel</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>vowel</span> <span class='op'>==</span> <span class='st'>"TRUE"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 315 x 2
-   author           vowel
-   &lt;chr&gt;            &lt;lgl&gt;
- 1 Ernest Cline     TRUE 
- 2 Anthony Horowitz TRUE 
- 3 Elin Hilderbrand TRUE 
- 4 Alice Hoffman    TRUE 
- 5 Asha Lemmie      TRUE 
- 6 Elena Ferrante   TRUE 
- 7 Ann Cleeves      TRUE 
- 8 Elin Hilderbrand TRUE 
- 9 Alex Michaelides TRUE 
-10 Akwaeke Emezi    TRUE 
+<pre><code># A tibble: 315 x 6
+   title    description          contributor  author  publisher  vowel
+   &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;      &lt;lgl&gt;
+ 1 READY P… In a sequel to “Rea… by Ernest C… Ernest… Ballantine TRUE 
+ 2 MOONFLO… Cecily Trehearne go… by Anthony … Anthon… Harper     TRUE 
+ 3 TROUBLE… The final installme… by Elin Hil… Elin H… Little, B… TRUE 
+ 4 MAGIC L… In a prequel to “Pr… by Alice Ho… Alice … Simon &amp; S… TRUE 
+ 5 FIFTY W… In 1940s Japan, an … by Asha Lem… Asha L… Dutton     TRUE 
+ 6 THE LYI… In this coming-of-a… by Elena Fe… Elena … Europa Ed… TRUE 
+ 7 THE DAR… The ninth book in t… by Ann Clee… Ann Cl… Minotaur   TRUE 
+ 8 28 SUMM… A relationship that… by Elin Hil… Elin H… Little, B… TRUE 
+ 9 THE SIL… Theo Faber looks in… by Alex Mic… Alex M… Celadon    TRUE 
+10 THE DEA… In southern Nigeria… by Akwaeke … Akwaek… Riverhead  TRUE 
 # … with 305 more rows</code></pre>
 </div>
 <ol start="3" type="1">
@@ -2278,7 +2276,129 @@ Assignments
 <li>Each regular expression would have to check to see if the range or requirements were included in the password. We would be able to use <code>str_detect()</code> and have each regular expression check for a capital letter, a lowercase letter, a digit, and a special character (whcih could be written like this <span class="math inline">\([a-z][A-Z]\d\W\)</span>).</li>
 </ul>
 <h2 id="tmap-exercises"><code>tmap</code> Exercises</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<ul>
+<li>Read in the data</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"World"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>In addition to the World data, we will use data called <strong>metro</strong> that comes from the tmap package. It contains metropolitan area information from major cities across the globe. Some important variables include:</p>
+<ul>
+<li><strong>Name</strong>: City name</li>
+<li><strong>pop2010</strong> : population in 2010</li>
+<li><strong>pop2020</strong> : population in 2020</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"metro"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ol type="1">
+<li>Make a world map using the base <strong>World</strong> dataset we used with the COVID example. Add information about income groups (<code>income_grp</code>) to the plot, specify a color palette.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>World</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;iso_a3&quot;       &quot;name&quot;         &quot;sovereignt&quot;   &quot;continent&quot;   
+ [5] &quot;area&quot;         &quot;pop_est&quot;      &quot;pop_est_dens&quot; &quot;economy&quot;     
+ [9] &quot;income_grp&quot;   &quot;gdp_cap_est&quot;  &quot;life_exp&quot;     &quot;well_being&quot;  
+[13] &quot;footprint&quot;    &quot;inequality&quot;   &quot;HPI&quot;          &quot;geometry&quot;    </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>metro</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;name&quot;      &quot;name_long&quot; &quot;iso_a3&quot;    &quot;pop1950&quot;   &quot;pop1960&quot;  
+ [6] &quot;pop1970&quot;   &quot;pop1980&quot;   &quot;pop1990&quot;   &quot;pop2000&quot;   &quot;pop2010&quot;  
+[11] &quot;pop2020&quot;   &quot;pop2030&quot;   &quot;geometry&quot; </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tmap_mode.html'>tmap_mode</a></span><span class='op'>(</span><span class='st'>'plot'</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>World</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_polygons.html'>tm_polygons</a></span><span class='op'>(</span><span class='st'>"income_grp"</span>, 
+              palette<span class='op'>=</span><span class='st'>"-Blues"</span>, 
+              contrast<span class='op'>=</span> <span class='fl'>.5</span>, 
+              id<span class='op'>=</span><span class='st'>"name"</span>, 
+              title<span class='op'>=</span><span class='st'>"Income group"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment4_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<ol start="2" type="1">
+<li>To the plot from (1), add the new dataset <strong>metro</strong> to the plot, and add information about cities’ populations in 2020</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tmap_mode.html'>tmap_mode</a></span><span class='op'>(</span><span class='st'>'plot'</span><span class='op'>)</span>
+
+
+<span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>World</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_polygons.html'>tm_polygons</a></span><span class='op'>(</span><span class='st'>"income_grp"</span>, 
+              palette<span class='op'>=</span><span class='st'>"-Blues"</span>, 
+              contrast<span class='op'>=</span> <span class='fl'>.5</span>, 
+              id<span class='op'>=</span><span class='st'>"name"</span>, 
+              title<span class='op'>=</span><span class='st'>"Income group"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>metro</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_symbols.html'>tm_bubbles</a></span><span class='op'>(</span><span class='st'>"pop2020"</span>,
+             contrast<span class='op'>=</span><span class='fl'>1</span>, 
+             title.size<span class='op'>=</span><span class='st'>"Metro population"</span>, 
+             id<span class='op'>=</span><span class='st'>"name"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment4_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<ol start="3" type="1">
+<li>Now, make a new plot with the World data that provides a look at country economic status and the inequality associated with each.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tmap_mode.html'>tmap_mode</a></span><span class='op'>(</span><span class='st'>'plot'</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>World</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_polygons.html'>tm_polygons</a></span><span class='op'>(</span><span class='st'>"economy"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_symbols.html'>tm_bubbles</a></span><span class='op'>(</span><span class='st'>"inequality"</span>, 
+             border.alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_layout.html'>tm_format</a></span><span class='op'>(</span><span class='st'>"World_wide"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment4_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<ol start="4" type="1">
+<li>Using a new data set, <code>NDL_muni</code> municipality data from the Netherlands, create a plot with two separate maps. One showing the percentage of men per municipality of the whole country, and one showing the same but faceted by <strong>province</strong>.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tmap_mode.html'>tmap_mode</a></span><span class='op'>(</span><span class='st'>"plot"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>NLD_muni</span><span class='op'>)</span>
+
+<span class='va'>NLD_muni</span> <span class='op'>&lt;-</span> <span class='va'>NLD_muni</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>perc_men <span class='op'>=</span> <span class='va'>pop_men</span> <span class='op'>/</span> <span class='va'>population</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span>
+
+<span class='va'>tm_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>NLD_muni</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_polygons.html'>tm_polygons</a></span><span class='op'>(</span><span class='st'>"perc_men"</span>, 
+              palette <span class='op'>=</span> <span class='st'>'RdYlBu'</span><span class='op'>)</span>
+
+<span class='va'>tm_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_shape.html'>tm_shape</a></span><span class='op'>(</span><span class='va'>NLD_muni</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_polygons.html'>tm_polygons</a></span><span class='op'>(</span><span class='st'>"perc_men"</span>, 
+                palette <span class='op'>=</span> <span class='st'>"RdYlBu"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tm_facets.html'>tm_facets</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='st'>"province"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/pkg/tmap/man/tmap_arrange.html'>tmap_arrange</a></span><span class='op'>(</span><span class='va'>tm_1</span>, <span class='va'>tm_2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Assignment4_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
+</div>
+<h2 id="data-ethics-data-visualization-principles">Data Ethics: Data visualization principles</h2>
+<p>I had heard of all of the principles from the article because I read <em>Calling Bullshit</em> for a class during Module 3 of this year. The graph that stood out as the worst to me was the one under the section “A changing denominator”. There were many issues with this graph: first, there was too much information on the graph, which made it impossible to decipher. Second, there were a few different scales, which made it extremely difficult to focus on and interpret. Finally, each type of plot on the graph had tons of overlap, making it even more difficult to read. The graph that fooled me was the barplot that did not have zero included on its x-axis. This seems like a common mistake that even an experienced data scientist could make and gloss over. Data visualization is extremely important when discussing the topic of data ethics. Bad data visualizations can mislead the reader, and cause them to spread misinformation.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
