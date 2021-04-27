@@ -17,4 +17,6 @@ navbar:
         href: Assignment3.html
       - text: "Assignment 4"
         href: Assignment4.html
+      - text: "Assignment 5"
+        href: Assignment5.html
 output: distill::distill_article
