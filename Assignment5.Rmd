@@ -9,6 +9,102 @@ output:
 ---
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r libraries}
+library(countrycode)
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(rgeos)
+```
+
+
+```{r}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+coordinates <- cbind(world, st_coordinates(st_centroid(world$geometry)))
+coordinates <- 
+  coordinates %>%
+  select(name,sovereignt, type, X,Y)
+```
+
+
+
+## Exercises
+
+(@) Convert the name of a country of choice into five different languages of your choice. Use the world dataset and use countryname. 
+
+```{r}
+question1 <-
+  world %>%
+  filter(name == 'Argentina')
+
+countryname(question1$name, 'cldr.name.zh')
+countryname(question1$name, 'cldr.name.es')
+countryname(question1$name, 'cldr.name.ru')
+countryname(question1$name, 'cldr.name.ar')
+countryname(question1$name, 'cldr.name.fr')
+```
+
+
+(@) Find the ‘region’ name and code for the top 30 countries. Use ‘countrycode’ for this.
+
+```{r}
+question2 <-
+  world %>% 
+  head(30)
+
+countrycode(question2$name, origin = 'country.name', destination = 'region')
+```
+
+
+(@) Use the guess_field() function to find the closest match of the origin of the adm0_a3 column in the world dataset.
+
+```{r}
+guess_field(world$adm0_a3)
+```
+
+
+(@) Draw a map with 5 countries with different labels using geom_sf, geom_text and countryname
+
+```{r}
+question4 <-
+  coordinates %>% 
+  filter(name %in% c("United States", "Canada", "Greenland", "Mexico", "Cuba")) %>% 
+  mutate(label = countryname(name, destination = 'un.name.en'))
+
+ggplot() + 
+  geom_sf(data = question4) + 
+  geom_text(data=question4 ,aes(X, Y, label=name), size=3) +
+  labs(x = NULL,
+       y = NULL) + 
+  theme(panel.background = element_blank())
+```
+
+
+(@) Draw a map that has each country named after the continent it belongs to and colored by their continent.
+
+```{r}
+question5 <-
+  coordinates %>% 
+  mutate(label = countryname(name, destination = 'region'))
+
+ggplot(data = world) +
+    geom_sf(data = question5, aes(fill = label)) + 
+    geom_text(data=question5 ,aes(X, Y, label=world$continent),
+    color = "darkblue", check_overlap = TRUE, size=2)+
+    labs(x = NULL,
+         y = NULL,
+         fill = "Region",
+         title = "World Map with Continent Labels, Colored by Region")+
+    theme(panel.background = element_blank())
+```
+
+
+
 
 
 
